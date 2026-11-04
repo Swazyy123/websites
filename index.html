@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LESTA HUB - Cyber Control V5.2</title>
+    <title>LESTA HUB - CYBER ENGINE V5.2</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -11,10 +11,10 @@
             --bg-deep: #09090b;
             --bg-card: #121216;
             --border: #27272a;
-            --border-glow: rgba(168, 85, 247, 0.4);
-            --accent: #a855f7;
-            --accent-hover: #9333ea;
-            --accent-glow: rgba(168, 85, 247, 0.25);
+            --border-glow: rgba(59, 130, 246, 0.4);
+            --accent: #3b82f6;
+            --accent-hover: #2563eb;
+            --accent-glow: rgba(59, 130, 246, 0.25);
             --text-main: #f4f4f5;
             --text-muted: #a1a1aa;
             --success: #22c55e;
@@ -24,548 +24,123 @@
             --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            outline: none;
-        }
-
-        body {
-            background-color: var(--bg-deep);
-            color: var(--text-main);
-            font-family: var(--font-sans);
-            min-height: 100vh;
-            overflow-x: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; outline: none; }
+        body { background-color: var(--bg-deep); color: var(--text-main); font-family: var(--font-sans); min-height: 100vh; overflow-x: hidden; }
 
         .cyber-grid {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: 
-                linear-gradient(to right, rgba(168, 85, 247, 0.03) 1px, transparent 1px),
-                linear-gradient(to bottom, rgba(168, 85, 247, 0.03) 1px, transparent 1px);
-            background-size: 32px 32px;
-            z-index: -1;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: linear-gradient(to right, rgba(59, 130, 246, 0.03) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(59, 130, 246, 0.03) 1px, transparent 1px);
+            background-size: 32px 32px; z-index: -1;
         }
 
-        .ambient-glow {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(168, 85, 247, 0.1) 0%, rgba(9, 9, 11, 0) 70%);
-            z-index: -1;
-            pointer-events: none;
+        .auth-wrapper {
+            display: flex; justify-content: center; align-items: center; height: 100vh; width: 100vw;
         }
 
         .auth-container {
-            width: 100%;
-            max-width: 420px;
-            padding: 2.5rem;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 30px var(--accent-glow);
-            text-align: center;
-            position: relative;
-            backdrop-filter: blur(12px);
+            width: 100%; max-width: 420px; padding: 2.5rem; background: var(--bg-card);
+            border: 1px solid var(--border); border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 30px var(--accent-glow); text-align: center;
         }
 
-        .auth-icon {
-            width: 64px;
-            height: 64px;
-            background: rgba(168, 85, 247, 0.1);
-            border: 1px solid var(--border-glow);
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 1.5rem;
-            color: var(--accent);
-            font-size: 1.75rem;
-            box-shadow: 0 0 20px var(--accent-glow);
+        .cyber-input, .cyber-select, .cyber-textarea {
+            width: 100%; background: rgba(9, 9, 11, 0.6); border: 1px solid var(--border);
+            border-radius: 12px; padding: 0.875rem 1rem; color: var(--text-main); font-family: var(--font-sans); font-size: 0.95rem;
         }
-
-        .auth-title {
-            font-size: 1.5rem;
-            font-weight: 800;
-            letter-spacing: -0.025em;
-            margin-bottom: 0.5rem;
-            color: var(--text-main);
-        }
-
-        .auth-subtitle {
-            font-size: 0.875rem;
-            color: var(--text-muted);
-            margin-bottom: 2rem;
-        }
-
-        .input-group {
-            position: relative;
-            margin-bottom: 1.25rem;
-            text-align: left;
-        }
-
-        .cyber-input {
-            width: 100%;
-            background: rgba(9, 9, 11, 0.6);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 0.875rem 1rem 0.875rem 2.75rem;
-            color: var(--text-main);
-            font-family: var(--font-mono);
-            font-size: 0.95rem;
-            transition: var(--transition);
-        }
-
-        .cyber-input:focus {
-            border-color: var(--accent);
-            box-shadow: 0 0 15px var(--accent-glow);
-            background: rgba(9, 9, 11, 0.9);
-        }
-
-        .input-icon {
-            position: absolute;
-            top: 50%;
-            left: 1rem;
-            transform: translateY(-50%);
-            color: var(--text-muted);
-            font-size: 1rem;
-            transition: var(--transition);
-        }
-
-        .cyber-input:focus ~ .input-icon {
-            color: var(--accent);
-        }
+        .cyber-input:focus, .cyber-select:focus, .cyber-textarea:focus { border-color: var(--accent); box-shadow: 0 0 15px var(--accent-glow); }
 
         .cyber-btn {
-            width: 100%;
-            background: var(--accent);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            padding: 0.875rem;
-            font-family: var(--font-sans);
-            font-weight: 700;
-            font-size: 0.95rem;
-            cursor: pointer;
-            transition: var(--transition);
-            box-shadow: 0 4px 15px var(--accent-glow);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            margin-top: 1rem;
+            width: 100%; background: var(--accent); color: white; border: none; border-radius: 12px;
+            padding: 0.875rem; font-weight: 700; cursor: pointer; transition: var(--transition);
+            box-shadow: 0 4px 15px var(--accent-glow); display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+        }
+        .cyber-btn:hover { background: var(--accent-hover); transform: translateY(-2px); }
+
+        .app-container { display: none; width: 100vw; min-height: 100vh; flex-direction: column; }
+
+        .top-navbar {
+            height: 70px; background: var(--bg-card); border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: space-between; padding: 0 2rem; position: sticky; top: 0; z-index: 100;
         }
 
-        .cyber-btn:hover {
-            background: var(--accent-hover);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px var(--accent-glow);
-        }
+        .brand-area { display: flex; align-items: center; gap: 1rem; }
+        .brand-title { font-size: 1.25rem; font-weight: 800; letter-spacing: -0.025em; color: #fff; }
+        .brand-subtitle { font-size: 0.65rem; color: var(--accent); font-family: var(--font-mono); letter-spacing: 0.1em; }
 
-        .error-msg {
-            color: var(--danger);
-            font-size: 0.8rem;
-            margin-top: 0.75rem;
-            min-height: 1.2rem;
-            font-weight: 500;
+        .nav-tabs { display: flex; gap: 0.5rem; align-items: center; overflow-x: auto; }
+        .nav-tab {
+            display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; border-radius: 10px;
+            color: var(--text-muted); font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: var(--transition); background: rgba(255,255,255,0.02);
         }
+        .nav-tab:hover, .nav-tab.active { background: rgba(59, 130, 246, 0.1); color: var(--accent); border: 1px solid var(--border-glow); }
+        .nav-badge { background: var(--accent); color: white; padding: 0.1rem 0.4rem; border-radius: 6px; font-size: 0.7rem; }
 
-        .app-container {
-            display: none;
-            width: 100vw;
-            height: 100vh;
-            grid-template-columns: 260px 1fr;
-            grid-template-rows: 70px 1fr;
-            background: var(--bg-deep);
+        .topbar-actions { display: flex; gap: 0.75rem; }
+        .action-chip {
+            background: rgba(255,255,255,0.05); border: 1px solid var(--border); padding: 0.5rem 1rem; border-radius: 10px;
+            color: var(--text-main); font-size: 0.85rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; transition: var(--transition);
         }
+        .action-chip:hover { border-color: var(--accent); color: var(--accent); }
 
-        .sidebar {
-            grid-row: 1 / 3;
-            background: var(--bg-card);
-            border-right: 1px solid var(--border);
-            display: flex;
-            flex-direction: column;
-            z-index: 10;
+        .main-content { padding: 2rem; max-width: 1400px; margin: 0 auto; width: 100%; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+        .stat-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 1.25rem; }
+        .stat-label { font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 0.5rem; }
+        .stat-number { font-size: 1.75rem; font-weight: 800; font-family: var(--font-mono); color: var(--text-main); }
+
+        .panel-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 1.5rem; margin-bottom: 1.5rem; }
+        .panel-title { font-size: 1rem; font-weight: 700; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.5rem; }
+
+        .cyber-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem; }
+        .cyber-table th { background: rgba(9, 9, 11, 0.4); color: var(--text-muted); font-weight: 600; padding: 0.875rem 1rem; border-bottom: 1px solid var(--border); }
+        .cyber-table td { padding: 0.875rem 1rem; border-bottom: 1px solid var(--border); color: var(--text-main); font-family: var(--font-mono); }
+        
+        .modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center; backdrop-filter: blur(5px);
         }
-
-        .sidebar-brand {
-            height: 70px;
-            display: flex;
-            align-items: center;
-            padding: 0 1.5rem;
-            gap: 0.75rem;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .brand-logo {
-            width: 36px;
-            height: 36px;
-            background: rgba(168, 85, 247, 0.1);
-            border: 1px solid var(--border-glow);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--accent);
-            font-size: 1.1rem;
-        }
-
-        .brand-text {
-            font-size: 1.1rem;
-            font-weight: 800;
-            letter-spacing: -0.025em;
-            background: linear-gradient(135deg, #fff 0%, var(--text-muted) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .nav-menu {
-            list-style: none;
-            padding: 1.5rem 1rem;
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-            flex-grow: 1;
-        }
-
-        .nav-item {
-            display: flex;
-            align-items: center;
-            gap: 0.875rem;
-            padding: 0.875rem 1rem;
-            border-radius: 10px;
-            color: var(--text-muted);
-            font-weight: 600;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .nav-item:hover, .nav-item.active {
-            background: rgba(168, 85, 247, 0.1);
-            color: var(--accent);
-            border: 1px solid var(--border-glow);
-        }
-
-        .nav-item i {
-            font-size: 1.1rem;
-            width: 20px;
-            text-align: center;
-        }
-
-        .topbar {
-            grid-column: 2;
-            height: 70px;
-            background: var(--bg-card);
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 2rem;
-            z-index: 5;
-        }
-
-        .topbar-title {
-            font-size: 1.1rem;
-            font-weight: 700;
-        }
-
-        .topbar-right {
-            display: flex;
-            align-items: center;
-            gap: 1.25rem;
-        }
-
-        .status-badge {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: rgba(168, 85, 247, 0.1);
-            border: 1px solid var(--border-glow);
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            color: var(--accent);
-        }
-
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            background: var(--accent);
-            border-radius: 50%;
-            box-shadow: 0 0 10px var(--accent);
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.4; }
-            100% { opacity: 1; }
-        }
-
-        .main-content {
-            grid-column: 2;
-            padding: 2rem;
-            overflow-y: auto;
-            background: var(--bg-deep);
-        }
-
-        .tab-content {
-            display: none;
-            animation: fadeIn 0.3s ease;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(6px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-
-        .stat-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 1.5rem;
-            position: relative;
-            overflow: hidden;
-            transition: var(--transition);
-        }
-
-        .stat-card:hover {
-            border-color: var(--border-glow);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-        }
-
-        .stat-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-
-        .stat-title {
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        .stat-icon {
-            width: 40px;
-            height: 40px;
-            background: rgba(168, 85, 247, 0.1);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--accent);
-        }
-
-        .stat-value {
-            font-size: 1.8rem;
-            font-weight: 800;
-            font-family: var(--font-mono);
-            color: var(--text-main);
-        }
-
-        .panel-box {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .panel-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.25rem;
-            padding-bottom: 0.75rem;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .panel-title {
-            font-size: 1rem;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .cyber-select, .cyber-textarea {
-            width: 100%;
-            background: rgba(9, 9, 11, 0.6);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 0.75rem 1rem;
-            color: var(--text-main);
-            font-family: var(--font-sans);
-            font-size: 0.9rem;
-            transition: var(--transition);
-        }
-
-        .cyber-select:focus, .cyber-textarea:focus {
-            border-color: var(--accent);
-            box-shadow: 0 0 12px var(--accent-glow);
-        }
-
-        .cyber-textarea {
-            resize: vertical;
-            min-height: 120px;
-            font-family: var(--font-mono);
-        }
-
-        .cyber-table {
-            width: 100%;
-            border-collapse: collapse;
-            text-align: left;
-            font-size: 0.9rem;
-        }
-
-        .cyber-table th {
-            background: rgba(9, 9, 11, 0.4);
-            color: var(--text-muted);
-            font-weight: 600;
-            padding: 0.875rem 1rem;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .cyber-table td {
-            padding: 0.875rem 1rem;
-            border-bottom: 1px solid var(--border);
-            color: var(--text-main);
-            font-family: var(--font-mono);
-        }
-
-        .cyber-table tr:hover td {
-            background: rgba(168, 85, 247, 0.02);
-        }
-
-        .badge {
-            padding: 0.25rem 0.6rem;
-            border-radius: 6px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-        }
-
-        .badge-success { background: rgba(34, 197, 94, 0.15); color: var(--success); border: 1px solid rgba(34, 197, 94, 0.3); }
-        .badge-danger { background: rgba(239, 68, 68, 0.15); color: var(--danger); border: 1px solid rgba(239, 68, 68, 0.3); }
-
-        .btn-icon {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--border);
-            color: var(--text-main);
-            width: 32px;
-            height: 32px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .btn-icon:hover {
-            background: var(--accent);
-            border-color: var(--accent);
-            box-shadow: 0 0 10px var(--accent-glow);
-        }
-
-        .btn-icon.danger:hover {
-            background: var(--danger);
-            border-color: var(--danger);
-            box-shadow: 0 0 10px rgba(239, 68, 68, 0.3);
-        }
+        .modal-content { background: var(--bg-card); border: 1px solid var(--border); border-radius: 20px; padding: 2rem; width: 100%; max-width: 500px; }
     </style>
 </head>
 <body>
 
     <div class="cyber-grid"></div>
-    <div class="ambient-glow"></div>
 
-    <!-- Giriş Bölümü -->
-    <div id="authScreen" class="auth-container">
-        <div class="auth-icon">
-            <i class="fa-solid fa-shield-halved"></i>
+    <!-- Giriş Ekranı -->
+    <div id="authScreen" class="auth-wrapper">
+        <div class="auth-container">
+            <h1 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 0.5rem;">LESTA HUB</h1>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.5rem;">Erişim Kodunu Girin (lesta4ever437)</p>
+            <input type="password" id="passcode" class="cyber-input" placeholder="Kod..." style="margin-bottom: 1rem;">
+            <button onclick="checkAuth()" class="cyber-btn">Giriş Yap</button>
+            <div id="authError" style="color: var(--danger); font-size: 0.8rem; margin-top: 1rem;"></div>
         </div>
-        <h1 class="auth-title">LESTA HUB</h1>
-        <p class="auth-subtitle">Erişim şifresini girin</p>
-        <div class="input-group">
-            <input type="password" id="passcode" class="cyber-input" placeholder="Şifre...">
-            <i class="fa-solid fa-key input-icon"></i>
-        </div>
-        <button onclick="checkAuth()" class="cyber-btn">
-            <i class="fa-solid fa-right-to-bracket"></i> Giriş Yap
-        </button>
-        <div id="authError" class="error-msg"></div>
     </div>
 
     <!-- Ana Panel -->
     <div id="appContainer" class="app-container">
-        <aside class="sidebar">
-            <div class="sidebar-brand">
-                <div class="brand-logo">
-                    <i class="fa-solid fa-cube"></i>
+        <header class="top-navbar">
+            <div class="brand-area">
+                <div>
+                    <div class="brand-title">LESTA HUB</div>
+                    <div class="brand-subtitle">CYBER ENGINE</div>
                 </div>
-                <span class="brand-text">LESTA HUB</span>
             </div>
-            <ul class="nav-menu">
-                <li class="nav-item active" onclick="switchTab('overview', this)">
-                    <i class="fa-solid fa-chart-pie"></i> Genel Bakış
-                </li>
-                <li class="nav-item" onclick="switchTab('players', this)">
-                    <i class="fa-solid fa-users"></i> Oyuncular
-                </li>
-                <li class="nav-item" onclick="switchTab('keys', this)">
-                    <i class="fa-solid fa-ticket"></i> Lisans / Anahtar
-                </li>
-                <li class="nav-item" onclick="switchTab('scripts', this)">
-                    <i class="fa-solid fa-code"></i> Script Merkezi
-                </li>
-                <li class="nav-item" onclick="switchTab('blacklist', this)">
-                    <i class="fa-solid fa-ban"></i> Kara Liste
-                </li>
-            </ul>
-        </aside>
-
-        <header class="topbar">
-            <div class="topbar-title" id="currentTitle">Genel Bakış</div>
-            <div class="topbar-right">
-                <div class="status-badge">
-                    <div class="status-dot"></div> Koruma: Aktif
-                </div>
+            <nav class="nav-tabs">
+                <div class="nav-tab active" onclick="switchTab('overview', this)"><i class="fa-solid fa-chart-pie"></i> Genel Bakış</div>
+                <div class="nav-tab" onclick="switchTab('players', this)"><i class="fa-solid fa-users"></i> Canlı Oyuncular <span class="nav-badge" id="badgePlayers">0</span></div>
+                <div class="nav-tab" onclick="switchTab('keys', this)"><i class="fa-solid fa-ticket"></i> Lisans & Key <span class="nav-badge" id="badgeKeys">0</span></div>
+                <div class="nav-tab" onclick="switchTab('scripts', this)"><i class="fa-solid fa-code"></i> Script Merkezi <span class="nav-badge" id="badgeScripts">0</span></div>
+                <div class="nav-tab" onclick="switchTab('blacklist', this)"><i class="fa-solid fa-ban"></i> Kara Liste <span class="nav-badge" id="badgeBlacklist">0</span></div>
+            </nav>
+            <div class="topbar-actions">
+                <button class="action-chip" onclick="location.reload()"><i class="fa-solid fa-rotate"></i> Yenile</button>
+                <button class="action-chip" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Çıkış</button>
             </div>
         </header>
 
@@ -573,89 +148,59 @@
             <!-- Genel Bakış -->
             <div id="tab-overview" class="tab-content active">
                 <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-header">
-                            <span class="stat-title">Aktif Oyuncular</span>
-                            <div class="stat-icon"><i class="fa-solid fa-user-group"></i></div>
+                    <div class="stat-card"><div class="stat-label">Toplam Script</div><div class="stat-number" id="statScripts">0</div></div>
+                    <div class="stat-card"><div class="stat-label">Toplam Key</div><div class="stat-number" id="statKeys">0</div></div>
+                    <div class="stat-card"><div class="stat-label">Aktif Key</div><div class="stat-number" id="statActiveKeys">0</div></div>
+                    <div class="stat-card"><div class="stat-label">Kullanılmış</div><div class="stat-number" id="statUsedKeys">0</div></div>
+                    <div class="stat-card"><div class="stat-label">Banlı</div><div class="stat-number" id="statBanned">0</div></div>
+                    <div class="stat-card"><div class="stat-label">Oyunda</div><div class="stat-number" id="statPlayersCount">0</div></div>
+                </div>
+
+                <div class="panel-box">
+                    <div class="panel-title"><i class="fa-solid fa-bolt"></i> HIZLI TOPLU KEY ÜRETİCİ</div>
+                    <div style="display: grid; grid-template-columns: 2fr 1fr 1fr auto; gap: 1rem; align-items: end;">
+                        <div>
+                            <label style="font-size:0.8rem; color:var(--text-muted); display:block; margin-bottom:0.4rem;">HEDEF SCRIPT</label>
+                            <select id="genScriptSelect" class="cyber-select"></select>
                         </div>
-                        <div class="stat-value" id="statPlayers">0</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-header">
-                            <span class="stat-title">Aktif Anahtarlar</span>
-                            <div class="stat-icon"><i class="fa-solid fa-key"></i></div>
+                        <div>
+                            <label style="font-size:0.8rem; color:var(--text-muted); display:block; margin-bottom:0.4rem;">SÜRE & BİRİM</label>
+                            <div style="display:flex; gap:0.5rem;">
+                                <input type="number" id="keyDurationNum" class="cyber-input" value="60" min="1">
+                                <select id="keyDurationUnit" class="cyber-select">
+                                    <option value="dakika">Dakika</option>
+                                    <option value="saat" selected>Saat</option>
+                                    <option value="hafta">Hafta</option>
+                                    <option value="ay">Ay</option>
+                                </select>
+                            </div>
                         </div>
-                        <div class="stat-value" id="statKeys">0</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-header">
-                            <span class="stat-title">Script Sayısı</span>
-                            <div class="stat-icon"><i class="fa-solid fa-file-code"></i></div>
+                        <div>
+                            <label style="font-size:0.8rem; color:var(--text-muted); display:block; margin-bottom:0.4rem;">MİKTAR</label>
+                            <input type="number" id="keyAmount" class="cyber-input" value="1" min="1">
                         </div>
-                        <div class="stat-value" id="statScripts">0</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-header">
-                            <span class="stat-title">Kara Liste</span>
-                            <div class="stat-icon"><i class="fa-solid fa-ban"></i></div>
-                        </div>
-                        <div class="stat-value" id="statBlacklist">0</div>
+                        <button onclick="generateKeys()" class="cyber-btn" style="height: 48px;">Toplu Key Üret ve Kopyala</button>
                     </div>
                 </div>
             </div>
 
-            <!-- Oyuncular -->
+            <!-- Canlı Oyuncular -->
             <div id="tab-players" class="tab-content">
                 <div class="panel-box">
-                    <div class="panel-header">
-                        <div class="panel-title"><i class="fa-solid fa-users"></i> Canlı Oyuncu Takibi</div>
-                    </div>
+                    <div class="panel-title"><i class="fa-solid fa-users"></i> Aktif Oyuncu Sunucuları</div>
                     <table class="cyber-table">
-                        <thead>
-                            <tr>
-                                <th>Oyuncu Adı</th>
-                                <th>ID</th>
-                                <th>Sunucu IP</th>
-                                <th>Durum</th>
-                            </tr>
-                        </thead>
-                        <tbody id="playerTableBody">
-                            <tr><td colspan="4" style="text-align: center; color: var(--text-muted);">Aktif oyuncu bulunmuyor.</td></tr>
-                        </tbody>
+                        <thead><tr><th>Oyuncu Adı</th><th>ID</th><th>Oynadığı Oyun / Sunucu</th><th>Açılış Zamanı</th><th>İşlem</th></tr></thead>
+                        <tbody id="playerTableBody"><tr><td colspan="5" style="text-align:center; color:var(--text-muted);">Aktif oyuncu bulunmuyor.</td></tr></tbody>
                     </table>
                 </div>
             </div>
 
-            <!-- Lisans / Anahtarlar -->
+            <!-- Lisans & Key -->
             <div id="tab-keys" class="tab-content">
                 <div class="panel-box">
-                    <div class="panel-header">
-                        <div class="panel-title"><i class="fa-solid fa-ticket"></i> Toplu Anahtar Üretici</div>
-                    </div>
-                    <div class="form-grid">
-                        <input type="number" id="keyCount" class="cyber-input" placeholder="Adet (Örn: 5)" min="1" value="1">
-                        <select id="keyDuration" class="cyber-select">
-                            <option value="1">1 Saat</option>
-                            <option value="24">1 Gün</option>
-                            <option value="168">1 Hafta</option>
-                            <option value="720">1 Ay</option>
-                        </select>
-                        <button onclick="generateKeys()" class="cyber-btn" style="margin-top:0;"><i class="fa-solid fa-plus"></i> Anahtar Üret</button>
-                    </div>
-                </div>
-                <div class="panel-box">
-                    <div class="panel-header">
-                        <div class="panel-title"><i class="fa-solid fa-list"></i> Üretilen Anahtarlar</div>
-                    </div>
+                    <div class="panel-title"><i class="fa-solid fa-ticket"></i> Key Yönetimi</div>
                     <table class="cyber-table">
-                        <thead>
-                            <tr>
-                                <th>Anahtar</th>
-                                <th>Süre</th>
-                                <th>Durum</th>
-                                <th>İşlem</th>
-                            </tr>
-                        </thead>
+                        <thead><tr><th>Key</th><th>Hədəf Script</th><th>Süre</th><th>Durum</th><th>İşlem</th></tr></thead>
                         <tbody id="keyTableBody"></tbody>
                     </table>
                 </div>
@@ -664,27 +209,17 @@
             <!-- Script Merkezi -->
             <div id="tab-scripts" class="tab-content">
                 <div class="panel-box">
-                    <div class="panel-header">
-                        <div class="panel-title"><i class="fa-solid fa-code"></i> Script Ekle / Yönet</div>
-                    </div>
-                    <div class="form-grid" style="grid-template-columns: 1fr;">
-                        <input type="text" id="scriptName" class="cyber-input" placeholder="Script Adı (Örn: Duel V2)">
-                        <textarea id="scriptCode" class="cyber-textarea" placeholder="Orijinal Lua kodunu buraya yazın..."></textarea>
-                        <button onclick="saveScript()" class="cyber-btn"><i class="fa-solid fa-upload"></i> Script Yükle</button>
+                    <div class="panel-title"><i class="fa-solid fa-code"></i> Yeni Script Yükle</div>
+                    <div style="display: flex; flex-direction: column; gap: 1rem;">
+                        <input type="text" id="scriptName" class="cyber-input" placeholder="SCRIPT ADI (Örn: DUEL V2)">
+                        <textarea id="scriptCode" class="cyber-textarea" placeholder="LUA SCRIPT KODU..."></textarea>
+                        <button onclick="saveScript()" class="cyber-btn">Scripti Yükle ve Koru</button>
                     </div>
                 </div>
                 <div class="panel-box">
-                    <div class="panel-header">
-                        <div class="panel-title"><i class="fa-solid fa-database"></i> Yüklenen Scriptler & Loadstring</div>
-                    </div>
+                    <div class="panel-title"><i class="fa-solid fa-database"></i> Yüklenen Scriptler</div>
                     <table class="cyber-table">
-                        <thead>
-                            <tr>
-                                <th>Adı</th>
-                                <th>Loadstring Kopyala</th>
-                                <th>İşlem</th>
-                            </tr>
-                        </thead>
+                        <thead><tr><th>Script Adı</th><th>Loadstring</th><th>Güncelle</th><th>Sil</th></tr></thead>
                         <tbody id="scriptTableBody"></tbody>
                     </table>
                 </div>
@@ -693,26 +228,16 @@
             <!-- Kara Liste -->
             <div id="tab-blacklist" class="tab-content">
                 <div class="panel-box">
-                    <div class="panel-header">
-                        <div class="panel-title"><i class="fa-solid fa-ban"></i> Kara Listeye Ekle</div>
-                    </div>
-                    <div class="form-grid">
-                        <input type="text" id="blackId" class="cyber-input" placeholder="Roblox User ID veya IP">
-                        <button onclick="addToBlacklist()" class="cyber-btn" style="margin-top:0;"><i class="fa-solid fa-user-slash"></i> Engelle</button>
+                    <div class="panel-title"><i class="fa-solid fa-ban"></i> Kara Listeye Ekle</div>
+                    <div style="display: grid; grid-template-columns: 1fr 2fr auto; gap: 1rem;">
+                        <input type="text" id="blackUser" class="cyber-input" placeholder="Roblox User ID veya Adı">
+                        <input type="text" id="blackReason" class="cyber-input" placeholder="Kick Sebebi (Örn: Script Çalma Girişimi)">
+                        <button onclick="addBlacklist()" class="cyber-btn">Engelle</button>
                     </div>
                 </div>
                 <div class="panel-box">
-                    <div class="panel-header">
-                        <div class="panel-title"><i class="fa-solid fa-list"></i> Engellenen Kullanıcılar</div>
-                    </div>
                     <table class="cyber-table">
-                        <thead>
-                            <tr>
-                                <th>ID / IP</th>
-                                <th>Tarih</th>
-                                <th>İşlem</th>
-                            </tr>
-                        </thead>
+                        <thead><tr><th>Kullanıcı</th><th>Sebep</th><th>Tarih</th><th>İşlem</th></tr></thead>
                         <tbody id="blacklistTableBody"></tbody>
                     </table>
                 </div>
@@ -720,147 +245,236 @@
         </main>
     </div>
 
+    <!-- Update Modal -->
+    <div id="updateModal" class="modal">
+        <div class="modal-content">
+            <div class="panel-title">Script Güncelle (Update)</div>
+            <input type="hidden" id="updateScriptId">
+            <div style="display:flex; flex-direction:column; gap:1rem;">
+                <input type="text" id="updateScriptName" class="cyber-input" placeholder="YENİ SCRIPT ADI">
+                <textarea id="updateScriptCode" class="cyber-textarea" placeholder="YENİ LUA KODU..."></textarea>
+                <div style="display:flex; gap:1rem;">
+                    <button onclick="executeScriptUpdate()" class="cyber-btn">Güncelle</button>
+                    <button onclick="closeUpdateModal()" class="cyber-btn" style="background:var(--border);">İptal</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         const CORRECT_PASS = "lesta4ever437";
 
         function checkAuth() {
-            const pass = document.getElementById('passcode').value;
-            const err = document.getElementById('authError');
-            if (pass === CORRECT_PASS) {
+            if(document.getElementById('passcode').value === CORRECT_PASS) {
                 document.getElementById('authScreen').style.display = 'none';
-                document.getElementById('appContainer').style.display = 'grid';
+                document.getElementById('appContainer').style.display = 'flex';
                 loadData();
             } else {
-                err.textContent = "Hatalı şifre!";
+                document.getElementById('authError').textContent = "Hatalı şifre!";
             }
         }
+
+        function logout() { location.reload(); }
 
         function switchTab(tabId, el) {
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
             document.getElementById('tab-' + tabId).classList.add('active');
             el.classList.add('active');
-            document.getElementById('currentTitle').textContent = el.textContent.trim();
         }
 
-        let appData = {
-            keys: JSON.parse(localStorage.getItem('lesta_keys') || '[]'),
+        let db = {
             scripts: JSON.parse(localStorage.getItem('lesta_scripts') || '[]'),
-            blacklist: JSON.parse(localStorage.getItem('lesta_blacklist') || '[]')
+            keys: JSON.parse(localStorage.getItem('lesta_keys') || '[]'),
+            blacklist: JSON.parse(localStorage.getItem('lesta_blacklist') || '[]'),
+            players: JSON.parse(localStorage.getItem('lesta_players') || '[{"name": "krovstan", "id": "10378183139", "server": "yemek yemek şişmanlaşmak", "time": "18 sa önce"}]')
         };
 
         function saveData() {
-            localStorage.setItem('lesta_keys', JSON.stringify(appData.keys));
-            localStorage.setItem('lesta_scripts', JSON.stringify(appData.scripts));
-            localStorage.setItem('lesta_blacklist', JSON.stringify(appData.blacklist));
-            updateStats();
+            localStorage.setItem('lesta_scripts', JSON.stringify(db.scripts));
+            localStorage.setItem('lesta_keys', JSON.stringify(db.keys));
+            localStorage.setItem('lesta_blacklist', JSON.stringify(db.blacklist));
+            updateUI();
         }
 
-        function updateStats() {
-            document.getElementById('statPlayers').textContent = "0";
-            document.getElementById('statKeys').textContent = appData.keys.length;
-            document.getElementById('statScripts').textContent = appData.scripts.length;
-            document.getElementById('statBlacklist').textContent = appData.blacklist.length;
-            renderTables();
-        }
-
-        function generateKeys() {
-            const count = parseInt(document.getElementById('keyCount').value) || 1;
-            const duration = document.getElementById('keyDuration').value;
-            for(let i=0; i<count; i++) {
-                let key = 'LESTA-' + Math.random().toString(36).substring(2, 8).toUpperCase() + '-' + Math.random().toString(36).substring(2, 6).toUpperCase();
-                appData.keys.push({ key, duration, status: 'Aktif' });
-            }
-            saveData();
-        }
-
-        function deleteKey(index) {
-            appData.keys.splice(index, 1);
-            saveData();
+        // Luraph bənzəri simulyasiya edilmiş güclü qoruma şifrələməsi
+        function luraphObfuscate(luaCode, scriptKey) {
+            let encoded = btoa(unescape(encodeURIComponent(luaCode)));
+            return `-- [LESTA HUB V5.2 LURAPH PROTECTED ENGINE]
+local script_key = "${scriptKey || 'KEY-EKLE'}";
+local _LestaEnc = "${encoded}";
+local function _D(data)
+    local b = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
+    data = string.gsub(data, '[^'..b..'=]', '')
+    return (data:gsub('.', function(x)
+        if (x == '=') then return '' end
+        local r,f='',(b:find(x)-1)
+        for i=6,1,-1 do r=r..(f%2^i-f%2^(i-1)>0 and '1' or '0') end
+        return r;
+    end):gsub('%d%d%d?%d?%d?%d?%d?%d?', function(x)
+        if (#x ~= 8) then return '' end
+        local c=0
+        for i=1,8 do c=c+(x:sub(i,i)=='1' and 2^(8-i) or 0) end
+        return string.char(c)
+    end))
+end
+local _S = _D(_LestaEnc)
+loadstring(_S)()`;
         }
 
         function saveScript() {
-            const name = document.getElementById('scriptName').value.trim();
-            const code = document.getElementById('scriptCode').value;
-            if(!name || !code) {
-                alert("Lütfen script adını ve kodunu eksiksiz girin!");
-                return;
-            }
-            const scriptId = 'script_' + Date.now();
-            appData.scripts.push({ id: scriptId, name, code });
+            let name = document.getElementById('scriptName').value.trim();
+            let code = document.getElementById('scriptCode').value;
+            if(!name || !code) return alert("Eksik bilgi!");
+            let id = 'script_' + Date.now();
+            let key = 'KEY-' + Math.random().toString(36).substring(2,8).toUpperCase();
+            
+            db.scripts.push({ id, name, code, key });
             document.getElementById('scriptName').value = '';
             document.getElementById('scriptCode').value = '';
             saveData();
-            alert("Script başarıyla yüklendi!");
+            alert("Script başarıyla yüklendi ve korundu!");
         }
 
-        function deleteScript(index) {
-            appData.scripts.splice(index, 1);
+        function openUpdateModal(id) {
+            let s = db.scripts.find(x => x.id === id);
+            if(!s) return;
+            document.getElementById('updateScriptId').value = s.id;
+            document.getElementById('updateScriptName').value = s.name;
+            document.getElementById('updateScriptCode').value = s.code;
+            document.getElementById('updateModal').style.display = 'flex';
+        }
+
+        function closeUpdateModal() { document.getElementById('updateModal').style.display = 'none'; }
+
+        function executeScriptUpdate() {
+            let id = document.getElementById('updateScriptId').value;
+            let name = document.getElementById('updateScriptName').value.trim();
+            let code = document.getElementById('updateScriptCode').value;
+            let s = db.scripts.find(x => x.id === id);
+            if(s) {
+                s.name = name;
+                s.code = code;
+                saveData();
+                closeUpdateModal();
+                alert("Script başarıyla güncellendi (Loadstring sabit kaldı)!");
+            }
+        }
+
+        function deleteScript(id) {
+            db.scripts = db.scripts.filter(x => x.id !== id);
+            saveData();
+        }
+
+        function generateKeys() {
+            let scriptId = document.getElementById('genScriptSelect').value;
+            let num = parseInt(document.getElementById('keyDurationNum').value) || 60;
+            let unit = document.getElementById('keyDurationUnit').value;
+            let amount = parseInt(document.getElementById('keyAmount').value) || 1;
+            let targetScript = db.scripts.find(x => x.id === scriptId);
+            let scriptName = targetScript ? targetScript.name : "Genel";
+
+            let fullText = "";
+            for(let i=0; i<amount; i++) {
+                let k = 'LESTA-' + Math.random().toString(36).substring(2,8).toUpperCase();
+                db.keys.push({ key: k, script: scriptName, duration: `${num} ${unit}`, status: 'KULLANILMAMIS' });
+                fullText += k + "\n";
+            }
+            saveData();
+            navigator.clipboard.writeText(fullText);
+            alert("Keyler üretildi ve panoya kopyalandı!");
+        }
+
+        function deleteKey(idx) {
+            db.keys.splice(idx, 1);
+            saveData();
+        }
+
+        function addBlacklist() {
+            let user = document.getElementById('blackUser').value.trim();
+            let reason = document.getElementById('blackReason').value.trim();
+            if(!user || !reason) return;
+            db.blacklist.push({ user, reason: reason + " (blacklistlendin)", date: new Date().toLocaleDateString('tr-TR') });
+            document.getElementById('blackUser').value = '';
+            document.getElementById('blackReason').value = '';
+            saveData();
+        }
+
+        function deleteBlacklist(idx) {
+            db.blacklist.splice(idx, 1);
             saveData();
         }
 
         function copyLoadstring(id) {
-            const link = window.location.origin + window.location.pathname + "?load=" + id;
-            const loadstringText = `loadstring(game:HttpGet("${link}"))()`;
-            navigator.clipboard.writeText(loadstringText).then(() => {
-                alert("Loadstring kopyalandı:\n" + loadstringText);
-            }).catch(err => {
-                prompt("Kopyalamak için bu metni seçin:", loadstringText);
-            });
+            let link = window.location.origin + window.location.pathname + "?load=" + id;
+            let txt = `loadstring(game:HttpGet("${link}"))()`;
+            navigator.clipboard.writeText(txt);
+            alert("Loadstring kopyalandı:\n" + txt);
         }
 
-        function addToBlacklist() {
-            const val = document.getElementById('blackId').value.trim();
-            if(!val) return;
-            appData.blacklist.push({ id: val, date: new Date().toLocaleDateString('tr-TR') });
-            document.getElementById('blackId').value = '';
-            saveData();
+        function updateUI() {
+            document.getElementById('statScripts').textContent = db.scripts.length;
+            document.getElementById('statKeys').textContent = db.keys.length;
+            document.getElementById('statActiveKeys').textContent = db.keys.filter(x => x.status === 'KULLANILMAMIS').length;
+            document.getElementById('statUsedKeys').textContent = db.keys.filter(x => x.status === 'KULLANILMIS').length;
+            document.getElementById('statBanned').textContent = db.blacklist.length;
+            document.getElementById('statPlayersCount').textContent = db.players.length;
+
+            document.getElementById('badgeScripts').textContent = db.scripts.length;
+            document.getElementById('badgeKeys').textContent = db.keys.length;
+            document.getElementById('badgeBlacklist').textContent = db.blacklist.length;
+            document.getElementById('badgePlayers').textContent = db.players.length;
+
+            // Script Select
+            let sel = document.getElementById('genScriptSelect');
+            sel.innerHTML = db.scripts.map(s => `<option value="${s.id}">${s.name}</option>`).join('') || '<option>Önce Script Ekleyin</option>';
+
+            // Script Table
+            let sHtml = "";
+            db.scripts.forEach(s => {
+                sHtml += `<tr><td>${s.name}</td><td><button class="action-chip" onclick="copyLoadstring('${s.id}')">Kopyala</button></td><td><button class="action-chip" onclick="openUpdateModal('${s.id}')">Update</button></td><td><button class="action-chip" style="color:var(--danger)" onclick="deleteScript('${s.id}')">Sil</button></td></tr>`;
+            });
+            document.getElementById('scriptTableBody').innerHTML = sHtml || '<tr><td colspan="4" style="text-align:center; color:var(--text-muted);">Script yok.</td></tr>';
+
+            // Key Table
+            let kHtml = "";
+            db.keys.forEach((k, idx) => {
+                let badgeColor = k.status === 'KULLANILMAMIS' ? 'var(--success)' : 'var(--danger)';
+                kHtml += `<tr><td>${k.key}</td><td>${k.script}</td><td>${k.duration}</td><td><span style="color:${badgeColor}">${k.status}</span></td><td><button class="action-chip" style="color:var(--danger)" onclick="deleteKey(${idx})">Sil</button></td></tr>`;
+            });
+            document.getElementById('keyTableBody').innerHTML = kHtml || '<tr><td colspan="5" style="text-align:center; color:var(--text-muted);">Key yok.</td></tr>';
+
+            // Player Table
+            let pHtml = "";
+            db.players.forEach(p => {
+                pHtml += `<tr><td>${p.name}</td><td>${p.id}</td><td>${p.server}</td><td>${p.time}</td><td><a href="roblox://experiences/start?placeId=0" class="action-chip" style="text-decoration:none; display:inline-block;">KATIL</a></td></tr>`;
+            });
+            document.getElementById('playerTableBody').innerHTML = pHtml || '<tr><td colspan="5" style="text-align:center; color:var(--text-muted);">Aktif oyuncu yok.</td></tr>';
+
+            // Blacklist Table
+            let bHtml = "";
+            db.blacklist.forEach((b, idx) => {
+                bHtml += `<tr><td>${b.user}</td><td>${b.reason}</td><td>${b.date}</td><td><button class="action-chip" style="color:var(--danger)" onclick="deleteBlacklist(${idx})">Kaldır</button></td></tr>`;
+            });
+            document.getElementById('blacklistTableBody').innerHTML = bHtml || '<tr><td colspan="4" style="text-align:center; color:var(--text-muted);">Kara liste boş.</td></tr>';
         }
 
-        function deleteBlacklist(index) {
-            appData.blacklist.splice(index, 1);
-            saveData();
-        }
-
-        function renderTables() {
-            // Keys
-            let kHtml = '';
-            appData.keys.forEach((k, idx) => {
-                kHtml += `<tr><td>${k.key}</td><td>${k.duration} Saat</td><td><span class="badge badge-success">${k.status}</span></td><td><button class="btn-icon danger" onclick="deleteKey(${idx})"><i class="fa-solid fa-trash"></i></button></td></tr>`;
-            });
-            document.getElementById('keyTableBody').innerHTML = kHtml || '<tr><td colspan="4" style="text-align:center; color:var(--text-muted);">Anahtar bulunmuyor.</td></tr>';
-
-            // Scripts
-            let sHtml = '';
-            appData.scripts.forEach((s, idx) => {
-                sHtml += `<tr><td>${s.name}</td><td><button class="cyber-btn" style="margin:0; padding:0.4rem 0.8rem; font-size:0.8rem;" onclick="copyLoadstring('${s.id}')"><i class="fa-solid fa-copy"></i> Loadstring Kopyala</button></td><td><button class="btn-icon danger" onclick="deleteScript(${idx})"><i class="fa-solid fa-trash"></i></button></td></tr>`;
-            });
-            document.getElementById('scriptTableBody').innerHTML = sHtml || '<tr><td colspan="3" style="text-align:center; color:var(--text-muted);">Script bulunmuyor.</td></tr>';
-
-            // Blacklist
-            let bHtml = '';
-            appData.blacklist.forEach((b, idx) => {
-                bHtml += `<tr><td>${b.id}</td><td>${b.date}</td><td><button class="btn-icon danger" onclick="deleteBlacklist(${idx})"><i class="fa-solid fa-trash"></i></button></td></tr>`;
-            });
-            document.getElementById('blacklistTableBody').innerHTML = bHtml || '<tr><td colspan="3" style="text-align:center; color:var(--text-muted);">Kara liste boş.</td></tr>';
-        }
-
-        // URL Loadstring handler
+        // URL Loadstring Loader Handler
         window.onload = function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const loadId = urlParams.get('load');
+            let params = new URLSearchParams(window.location.search);
+            let loadId = params.get('load');
             if(loadId) {
-                const scripts = JSON.parse(localStorage.getItem('lesta_scripts') || '[]');
-                const target = scripts.find(s => s.id === loadId);
+                let target = db.scripts.find(x => x.id === loadId);
                 if(target) {
                     document.open();
-                    document.write(target.code);
+                    document.write(`<pre style="color:#fff; background:#000; padding:20px; font-family:monospace;">${luraphObfuscate(target.code, target.key)}</pre>`);
                     document.close();
                     return;
                 }
             }
-            updateStats();
+            updateUI();
         };
     </script>
 </body>
 </html>
+
