@@ -10,7 +10,6 @@
         :root {
             --bg-deep: #09090b;
             --bg-card: #121216;
-            --bg-glass: rgba(18, 18, 22, 0.7);
             --border: #27272a;
             --border-glow: rgba(168, 85, 247, 0.4);
             --accent: #a855f7;
@@ -20,7 +19,6 @@
             --text-muted: #a1a1aa;
             --success: #22c55e;
             --danger: #ef4444;
-            --warning: #f59e0b;
             --font-sans: 'Plus Jakarta Sans', sans-serif;
             --font-mono: 'JetBrains Mono', monospace;
             --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
@@ -64,7 +62,7 @@
             transform: translate(-50%, -50%);
             width: 600px;
             height: 600px;
-            background: radial-gradient(circle, rgba(168, 85, 247, 0.08) 0%, rgba(9, 9, 11, 0) 70%);
+            background: radial-gradient(circle, rgba(168, 85, 247, 0.1) 0%, rgba(9, 9, 11, 0) 70%);
             z-index: -1;
             pointer-events: none;
         }
@@ -293,21 +291,21 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            background: rgba(34, 197, 94, 0.1);
-            border: 1px solid rgba(34, 197, 94, 0.2);
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid var(--border-glow);
             padding: 0.5rem 1rem;
             border-radius: 20px;
             font-size: 0.8rem;
             font-weight: 600;
-            color: var(--success);
+            color: var(--accent);
         }
 
         .status-dot {
             width: 8px;
             height: 8px;
-            background: var(--success);
+            background: var(--accent);
             border-radius: 50%;
-            box-shadow: 0 0 10px var(--success);
+            box-shadow: 0 0 10px var(--accent);
             animation: pulse 2s infinite;
         }
 
@@ -485,11 +483,6 @@
         .badge-success { background: rgba(34, 197, 94, 0.15); color: var(--success); border: 1px solid rgba(34, 197, 94, 0.3); }
         .badge-danger { background: rgba(239, 68, 68, 0.15); color: var(--danger); border: 1px solid rgba(239, 68, 68, 0.3); }
 
-        .action-btns {
-            display: flex;
-            gap: 0.5rem;
-        }
-
         .btn-icon {
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid var(--border);
@@ -571,7 +564,7 @@
             <div class="topbar-title" id="currentTitle">Genel Bakış</div>
             <div class="topbar-right">
                 <div class="status-badge">
-                    <div class="status-dot"></div> Koruma: Aktif
+                    <div class="status-dot"></div> Lesta Hub v5.2
                 </div>
             </div>
         </header>
@@ -620,7 +613,7 @@
                     <table class="cyber-table">
                         <thead>
                             <tr>
-                                '<th>Oyuncu Adı</th>'
+                                <th>Oyuncu Adı</th>
                                 <th>ID</th>
                                 <th>Sunucu IP</th>
                                 <th>Durum</th>
@@ -672,23 +665,23 @@
             <div id="tab-scripts" class="tab-content">
                 <div class="panel-box">
                     <div class="panel-header">
-                        <div class="panel-title"><i class="fa-solid fa-code"></i> Script Ekle / Güncelle</div>
+                        <div class="panel-title"><i class="fa-solid fa-code"></i> Script Ekle / Yönet</div>
                     </div>
                     <div class="form-grid" style="grid-template-columns: 1fr;">
                         <input type="text" id="scriptName" class="cyber-input" placeholder="Script Adı (Örn: Duel V2)">
-                        <textarea id="scriptCode" class="cyber-textarea" placeholder="Orijinal Lua kodunu buraya yazın... (Otomatik olarak şifrelenecek)"></textarea>
-                        <button onclick="saveScript()" class="cyber-btn"><i class="fa-solid fa-upload"></i> Script Yükle ve Koru</button>
+                        <textarea id="scriptCode" class="cyber-textarea" placeholder="Orijinal Lua kodunu buraya yazın..."></textarea>
+                        <button onclick="saveScript()" class="cyber-btn"><i class="fa-solid fa-upload"></i> Script Yükle</button>
                     </div>
                 </div>
                 <div class="panel-box">
                     <div class="panel-header">
-                        <div class="panel-title"><i class="fa-solid fa-database"></i> Yüklenen Scriptler</div>
+                        <div class="panel-title"><i class="fa-solid fa-database"></i> Yüklenen Scriptler & Loadstring</div>
                     </div>
                     <table class="cyber-table">
                         <thead>
                             <tr>
                                 <th>Adı</th>
-                                <th>Loadstring</th>
+                                <th>Loadstring Kopyala</th>
                                 <th>İşlem</th>
                             </tr>
                         </thead>
@@ -750,30 +743,6 @@
             document.getElementById('currentTitle').textContent = el.textContent.trim();
         }
 
-        // Base64 Obfuscator (Executor uyumlu tam koruma)
-        function obfuscateLua(code) {
-            let encoded = btoa(unescape(encodeURIComponent(code)));
-            return `local _C = "${encoded}"
-local _B = (syn and syn.crypt and syn.crypt.base64) or (base64 and base64.decode) or function(data)
-    local b = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
-    data = string.gsub(data, '[^'..b..'=]', '')
-    return (data:gsub('.', function(x)
-        if (x == '=') then return '' end
-        local r,f='',(b:find(x)-1)
-        for i=6,1,-1 do r=r..(f%2^i-f%2^(i-1)>0 and '1' or '0') end
-        return r;
-    end):gsub('%d%d%d?%d?%d?%d?%d?%d?', function(x)
-        if (#x ~= 8) then return '' end
-        local c=0
-        for i=1,8 do c=c+(x:sub(i,i)=='1' and 2^(8-i) or 0) end
-        return string.char(c)
-    end))
-end
-local _S = _B(_C)
-local _F = loadstring or load
-_F(_S)()`;
-        }
-
         let appData = {
             keys: JSON.parse(localStorage.getItem('lesta_keys') || '[]'),
             scripts: JSON.parse(localStorage.getItem('lesta_scripts') || '[]'),
@@ -817,14 +786,12 @@ _F(_S)()`;
                 alert("Lütfen script adını ve kodunu eksiksiz girin!");
                 return;
             }
-            const protectedCode = obfuscateLua(code);
             const scriptId = 'script_' + Date.now();
-            
-            appData.scripts.push({ id: scriptId, name, code: protectedCode });
+            appData.scripts.push({ id: scriptId, name, code });
             document.getElementById('scriptName').value = '';
             document.getElementById('scriptCode').value = '';
             saveData();
-            alert("Script başarıyla yüklendi ve korundu!");
+            alert("Script başarıyla yüklendi!");
         }
 
         function deleteScript(index) {
@@ -834,8 +801,12 @@ _F(_S)()`;
 
         function copyLoadstring(id) {
             const link = window.location.origin + window.location.pathname + "?load=" + id;
-            navigator.clipboard.writeText(`loadstring(game:HttpGet("${link}"))()`);
-            alert("Loadstring başarıyla kopyalandı!");
+            const loadstringText = `loadstring(game:HttpGet("${link}"))()`;
+            navigator.clipboard.writeText(loadstringText).then(() => {
+                alert("Loadstring kopyalandı:\n" + loadstringText);
+            }).catch(err => {
+                prompt("Kopyalamak için bu metni seçin:", loadstringText);
+            });
         }
 
         function addToBlacklist() {
@@ -862,7 +833,7 @@ _F(_S)()`;
             // Scripts
             let sHtml = '';
             appData.scripts.forEach((s, idx) => {
-                sHtml += `<tr><td>${s.name}</td><td><button class="btn-icon" onclick="copyLoadstring('${s.id}')"><i class="fa-solid fa-copy"></i></button></td><td><button class="btn-icon danger" onclick="deleteScript(${idx})"><i class="fa-solid fa-trash"></i></button></td></tr>`;
+                sHtml += `<tr><td>${s.name}</td><td><button class="cyber-btn" style="margin:0; padding:0.4rem 0.8rem; font-size:0.8rem;" onclick="copyLoadstring('${s.id}')"><i class="fa-solid fa-copy"></i> Loadstring Kopyala</button></td><td><button class="btn-icon danger" onclick="deleteScript(${idx})"><i class="fa-solid fa-trash"></i></button></td></tr>`;
             });
             document.getElementById('scriptTableBody').innerHTML = sHtml || '<tr><td colspan="3" style="text-align:center; color:var(--text-muted);">Script bulunmuyor.</td></tr>';
 
