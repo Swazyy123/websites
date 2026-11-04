@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LESTA HUB - CYBER V5.2 (Obfuscator Integrated)</title>
+    <title>LESTA HUB - CYBER V5.2</title>
     <style>
         :root {
             --bg-color: #0b0c10;
@@ -389,9 +389,6 @@
                 <span class="brand-badge">CYBER V5.2</span>
             </div>
         </div>
-        <div>
-            <button class="btn btn-cyan btn-sm" onclick="location.reload()">🔄 Yenilendi</button>
-        </div>
     </header>
 
     <nav>
@@ -517,8 +514,8 @@
                             <th>KEY</th>
                             <th>SCRİPT</th>
                             <th>DURUM</th>
-                            <th>MÜDDƏT</th>
-                            <th>İŞLƏM</th>
+                            <th>SÜRE</th>
+                            <th>İŞLEM</th>
                         </tr>
                     </thead>
                     <tbody id="keys-table-body"></tbody>
@@ -529,7 +526,7 @@
         <!-- TAB 4: SCRIPT MERKEZİ -->
         <div id="script-merkezi" class="tab-content">
             <div class="panel">
-                <div class="panel-header">💾 YENİ SCRİPT YÜKLE (OTOMATİK OBFUSCATOR KORUMALI)</div>
+                <div class="panel-header">💾 YENİ SCRİPT YÜKLE</div>
                 <div class="input-group">
                     <label>SCRİPT ADI</label>
                     <input type="text" id="script-name-input" placeholder="Örn: DUEL V2">
@@ -538,7 +535,7 @@
                     <label>LUA SCRİPT KODU</label>
                     <textarea id="script-code-input" rows="6" placeholder="-- Lua kodunu buraya yapıştırın"></textarea>
                 </div>
-                <button class="btn btn-cyan" onclick="uploadScript()">💾 SCRİPTİ SHİFRELƏ VƏ YÜKLE</button>
+                <button class="btn btn-cyan" onclick="uploadScript()">💾 SCRİPT YÜKLE</button>
             </div>
 
             <div class="panel">
@@ -575,7 +572,7 @@
     <!-- UPDATE MODAL -->
     <div id="update-modal" class="modal">
         <div class="modal-content">
-            <h3 style="margin-bottom: 15px;">SCRİPTİ YENİLE (UPDATE)</h3>
+            <h3 style="margin-bottom: 15px;">SCRİPTİ GÜNCELLE (UPDATE)</h3>
             <input type="hidden" id="update-script-id">
             <div class="input-group">
                 <label>YENİ SCRIPT ADI</label>
@@ -586,7 +583,7 @@
                 <textarea id="update-script-code" rows="6"></textarea>
             </div>
             <div style="display: flex; gap: 10px; margin-top: 15px;">
-                <button class="btn btn-cyan" onclick="saveScriptUpdate()">KAYDET VE OBFUSCATE ET</button>
+                <button class="btn btn-cyan" onclick="saveScriptUpdate()">KAYDET</button>
                 <button class="btn btn-danger" onclick="closeModal()">İPTAL</button>
             </div>
         </div>
@@ -595,32 +592,18 @@
     <script>
         const AUTH_CODE = "lesta4ever437";
 
-        // LUA OBFUSCATOR ENGINE (Qoruyucu Funksiya)
+        // Obfuscate Lua code
         function obfuscateLua(code) {
-            if (!code) return "";
-            // Əgər kod artıq şifrələnibsə təkrar etmir
-            if (code.includes("_LESTA_PROTECT_")) return code;
-
             let bytes = [];
-            const key = 0x5A;
             for (let i = 0; i < code.length; i++) {
-                bytes.push(code.charCodeAt(i) ^ key);
+                bytes.push(code.charCodeAt(i) ^ 0x5A);
             }
-
-            return `-- [[ LESTA HUB CYBER V5.2 PROTECTED SCRİPT ]]
--- _LESTA_PROTECT_
-local _E = {${bytes.join(',')}}
-local _D = ""
-for i = 1, #_E do
-    _D = _D .. string.char(bit32.bxor(_E[i], ${key}))
-end
-local _F = loadstring or load
-_F(_D)()`.trim();
+            return `local _E = {${bytes.join(',')}}\nlocal _D = ""\nfor i = 1, #_E do _D = _D .. string.char(bit32.bxor(_E[i], 0x5A)) end\n(loadstring or load)(_D)()`;
         }
 
         // State Data
         let scripts = JSON.parse(localStorage.getItem('lesta_scripts')) || [
-            { id: 'sc_1', name: 'DUEL V2', code: obfuscateLua('print("DUEL V2 Loaded Successfully!")') }
+            { id: 'sc_1', name: 'DUEL V2', code: obfuscateLua('print("DUEL V2 Loaded!")') }
         ];
         let keys = JSON.parse(localStorage.getItem('lesta_keys')) || [];
         let blacklist = JSON.parse(localStorage.getItem('lesta_blacklist')) || [];
@@ -671,7 +654,6 @@ _F(_D)()`.trim();
 
             if (!name || !rawCode) return alert("Lütfen isim ve kod girin!");
 
-            // Kodu şifrələyib yadda saxlayır
             const obfuscatedCode = obfuscateLua(rawCode);
 
             const newScript = {
@@ -687,7 +669,7 @@ _F(_D)()`.trim();
 
             document.getElementById('script-name-input').value = '';
             document.getElementById('script-code-input').value = '';
-            alert("Script uğurla şifrələndi və yükləndi!");
+            alert("Script başarıyla yüklendi ve korumaya alındı!");
         }
 
         function renderScripts() {
@@ -701,7 +683,7 @@ _F(_D)()`.trim();
                 card.className = 'item-card';
                 card.innerHTML = `
                     <div style="flex: 1; margin-right: 15px;">
-                        <h4>${sc.name} <span style="font-size:10px; color:var(--success); border:1px solid var(--success); padding:2px 5px; border-radius:4px;">🔒 SHİFRELİ</span></h4>
+                        <h4>${sc.name}</h4>
                         <div class="code-box">${loadstringCode}</div>
                     </div>
                     <div style="display: flex; gap: 8px;">
@@ -727,7 +709,7 @@ _F(_D)()`.trim();
 
             document.getElementById('update-script-id').value = sc.id;
             document.getElementById('update-script-name').value = sc.name;
-            document.getElementById('update-script-code').value = sc.code;
+            document.getElementById('update-script-code').value = '';
             document.getElementById('update-modal').style.display = 'flex';
         }
 
@@ -738,15 +720,18 @@ _F(_D)()`.trim();
         function saveScriptUpdate() {
             const id = document.getElementById('update-script-id').value;
             const sc = scripts.find(s => s.id === id);
+            const newRawCode = document.getElementById('update-script-code').value.trim();
+
             if (sc) {
                 sc.name = document.getElementById('update-script-name').value;
-                const rawCode = document.getElementById('update-script-code').value;
-                sc.code = obfuscateLua(rawCode);
+                if (newRawCode) {
+                    sc.code = obfuscateLua(newRawCode);
+                }
                 saveData();
                 renderScripts();
                 updateDropdowns();
                 closeModal();
-                alert("Script yeniləndi və şifrələndi!");
+                alert("Script başarıyla güncellendi!");
             }
         }
 
@@ -789,7 +774,7 @@ _F(_D)()`.trim();
                 tr.innerHTML = `
                     <td style="font-family: monospace; font-weight: bold;">${k.key}</td>
                     <td>${k.script}</td>
-                    <td><span class="status-tag ${k.used ? 'status-used' : 'status-unused'}">${k.used ? 'KULLANILMIŞ' : 'KULLANILMAMIS'}</span></td>
+                    <td><span class="status-tag ${k.used ? 'status-used' : 'status-unused'}">${k.used ? 'KULLANILMIŞ' : 'KULLANILMAMIŞ'}</span></td>
                     <td>${k.durationStr}</td>
                     <td><button class="btn btn-danger btn-sm" onclick="deleteKey(${idx})">Sil</button></td>
                 `;
@@ -956,4 +941,3 @@ _F(_D)()`.trim();
     </script>
 </body>
 </html>
-
