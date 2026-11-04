@@ -113,7 +113,7 @@
 
         .input-group {
             position: relative;
-            margin-bottom: 1.25srem;
+            margin-bottom: 1.25rem;
             text-align: left;
         }
 
@@ -522,24 +522,24 @@
     <div class="cyber-grid"></div>
     <div class="ambient-glow"></div>
 
-    <!-- Giriş Bölməsi -->
+    <!-- Giriş Bölümü -->
     <div id="authScreen" class="auth-container">
         <div class="auth-icon">
             <i class="fa-solid fa-shield-halved"></i>
         </div>
         <h1 class="auth-title">LESTA HUB</h1>
-        <p class="auth-subtitle">Giriş şifrəsini daxil edin</p>
+        <p class="auth-subtitle">Erişim şifresini girin</p>
         <div class="input-group">
-            <input type="password" id="passcode" class="cyber-input" placeholder="Şifrə...">
+            <input type="password" id="passcode" class="cyber-input" placeholder="Şifre...">
             <i class="fa-solid fa-key input-icon"></i>
         </div>
         <button onclick="checkAuth()" class="cyber-btn">
-            <i class="fa-solid fa-right-to-bracket"></i> Təsdiqlə
+            <i class="fa-solid fa-right-to-bracket"></i> Giriş Yap
         </button>
         <div id="authError" class="error-msg"></div>
     </div>
 
-    <!-- Əsas Panel -->
+    <!-- Ana Panel -->
     <div id="appContainer" class="app-container">
         <aside class="sidebar">
             <div class="sidebar-brand">
@@ -550,60 +550,60 @@
             </div>
             <ul class="nav-menu">
                 <li class="nav-item active" onclick="switchTab('overview', this)">
-                    <i class="fa-solid fa-chart-pie"></i> Ümumi Baxış
+                    <i class="fa-solid fa-chart-pie"></i> Genel Bakış
                 </li>
                 <li class="nav-item" onclick="switchTab('players', this)">
-                    <i class="fa-solid fa-users"></i> Oyunçular
+                    <i class="fa-solid fa-users"></i> Oyuncular
                 </li>
                 <li class="nav-item" onclick="switchTab('keys', this)">
-                    <i class="fa-solid fa-ticket"></i> Lisenziya / Açar
+                    <i class="fa-solid fa-ticket"></i> Lisans / Anahtar
                 </li>
                 <li class="nav-item" onclick="switchTab('scripts', this)">
-                    <i class="fa-solid fa-code"></i> Script Mərkəzi
+                    <i class="fa-solid fa-code"></i> Script Merkezi
                 </li>
                 <li class="nav-item" onclick="switchTab('blacklist', this)">
-                    <i class="fa-solid fa-ban"></i> Qara Siyahı
+                    <i class="fa-solid fa-ban"></i> Kara Liste
                 </li>
             </ul>
         </aside>
 
         <header class="topbar">
-            <div class="topbar-title" id="currentTitle">Ümumi Baxış</div>
+            <div class="topbar-title" id="currentTitle">Genel Bakış</div>
             <div class="topbar-right">
                 <div class="status-badge">
-                    <div class="status-dot"></div> Səviyyə: Qorunur
+                    <div class="status-dot"></div> Koruma: Aktif
                 </div>
             </div>
         </header>
 
         <main class="main-content">
-            <!-- Ümumi Baxış -->
+            <!-- Genel Bakış -->
             <div id="tab-overview" class="tab-content active">
                 <div class="stats-grid">
                     <div class="stat-card">
                         <div class="stat-header">
-                            <span class="stat-title">Aktiv Oyunçular</span>
+                            <span class="stat-title">Aktif Oyuncular</span>
                             <div class="stat-icon"><i class="fa-solid fa-user-group"></i></div>
                         </div>
                         <div class="stat-value" id="statPlayers">0</div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-header">
-                            <span class="stat-title">Aktiv Açarlar</span>
+                            <span class="stat-title">Aktif Anahtarlar</span>
                             <div class="stat-icon"><i class="fa-solid fa-key"></i></div>
                         </div>
                         <div class="stat-value" id="statKeys">0</div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-header">
-                            <span class="stat-title">Script Sayı</span>
+                            <span class="stat-title">Script Sayısı</span>
                             <div class="stat-icon"><i class="fa-solid fa-file-code"></i></div>
                         </div>
                         <div class="stat-value" id="statScripts">0</div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-header">
-                            <span class="stat-title">Qara Siyahı</span>
+                            <span class="stat-title">Kara Liste</span>
                             <div class="stat-icon"><i class="fa-solid fa-ban"></i></div>
                         </div>
                         <div class="stat-value" id="statBlacklist">0</div>
@@ -611,56 +611,56 @@
                 </div>
             </div>
 
-            <!-- Oyunçular -->
+            <!-- Oyuncular -->
             <div id="tab-players" class="tab-content">
                 <div class="panel-box">
                     <div class="panel-header">
-                        <div class="panel-title"><i class="fa-solid fa-users"></i> Canlı Oyunçu İzləmə</div>
+                        <div class="panel-title"><i class="fa-solid fa-users"></i> Canlı Oyuncu Takibi</div>
                     </div>
                     <table class="cyber-table">
                         <thead>
                             <tr>
-                                <th>Oyunçu Adı</th>
+                                '<th>Oyuncu Adı</th>'
                                 <th>ID</th>
-                                <th>Server IP</th>
-                                <th>Status</th>
+                                <th>Sunucu IP</th>
+                                <th>Durum</th>
                             </tr>
                         </thead>
                         <tbody id="playerTableBody">
-                            <tr><td colspan="4" style="text-align: center; color: var(--text-muted);">Aktiv oyunçu yoxdur.</td></tr>
+                            <tr><td colspan="4" style="text-align: center; color: var(--text-muted);">Aktif oyuncu bulunmuyor.</td></tr>
                         </tbody>
                     </table>
                 </div>
             </div>
 
-            <!-- Lisenziya / Açarlar -->
+            <!-- Lisans / Anahtarlar -->
             <div id="tab-keys" class="tab-content">
                 <div class="panel-box">
                     <div class="panel-header">
-                        <div class="panel-title"><i class="fa-solid fa-ticket"></i> Toplu Açar Generatoru</div>
+                        <div class="panel-title"><i class="fa-solid fa-ticket"></i> Toplu Anahtar Üretici</div>
                     </div>
                     <div class="form-grid">
-                        <input type="number" id="keyCount" class="cyber-input" placeholder="Say (Məs: 5)" min="1" value="1">
+                        <input type="number" id="keyCount" class="cyber-input" placeholder="Adet (Örn: 5)" min="1" value="1">
                         <select id="keyDuration" class="cyber-select">
                             <option value="1">1 Saat</option>
                             <option value="24">1 Gün</option>
-                            <option value="168">1 Həftə</option>
+                            <option value="168">1 Hafta</option>
                             <option value="720">1 Ay</option>
                         </select>
-                        <button onclick="generateKeys()" class="cyber-btn" style="margin-top:0;"><i class="fa-solid fa-plus"></i> Açar Yarat</button>
+                        <button onclick="generateKeys()" class="cyber-btn" style="margin-top:0;"><i class="fa-solid fa-plus"></i> Anahtar Üret</button>
                     </div>
                 </div>
                 <div class="panel-box">
                     <div class="panel-header">
-                        <div class="panel-title"><i class="fa-solid fa-list"></i> Yaradılmış Açarlar</div>
+                        <div class="panel-title"><i class="fa-solid fa-list"></i> Üretilen Anahtarlar</div>
                     </div>
                     <table class="cyber-table">
                         <thead>
                             <tr>
-                                <th>Açar</th>
-                                <th>Müddət</th>
-                                <th>Status</th>
-                                <th>Əməliyyat</th>
+                                <th>Anahtar</th>
+                                <th>Süre</th>
+                                <th>Durum</th>
+                                <th>İşlem</th>
                             </tr>
                         </thead>
                         <tbody id="keyTableBody"></tbody>
@@ -668,28 +668,28 @@
                 </div>
             </div>
 
-            <!-- Script Mərkəzi -->
+            <!-- Script Merkezi -->
             <div id="tab-scripts" class="tab-content">
                 <div class="panel-box">
                     <div class="panel-header">
-                        <div class="panel-title"><i class="fa-solid fa-code"></i> Script Əlavə Et / Yenilə</div>
+                        <div class="panel-title"><i class="fa-solid fa-code"></i> Script Ekle / Güncelle</div>
                     </div>
                     <div class="form-grid" style="grid-template-columns: 1fr;">
-                        <input type="text" id="scriptName" class="cyber-input" placeholder="Script Adı (Məs: Duel V2)">
-                        <textarea id="scriptCode" class="cyber-textarea" placeholder="Orijinal Lua kodunu bura yazın... (Avtomatik qorunacaq)"></textarea>
-                        <button onclick="saveScript()" class="cyber-btn"><i class="fa-solid fa-upload"></i> Script Yüklə / Qoru</button>
+                        <input type="text" id="scriptName" class="cyber-input" placeholder="Script Adı (Örn: Duel V2)">
+                        <textarea id="scriptCode" class="cyber-textarea" placeholder="Orijinal Lua kodunu buraya yazın... (Otomatik olarak şifrelenecek)"></textarea>
+                        <button onclick="saveScript()" class="cyber-btn"><i class="fa-solid fa-upload"></i> Script Yükle ve Koru</button>
                     </div>
                 </div>
                 <div class="panel-box">
                     <div class="panel-header">
-                        <div class="panel-title"><i class="fa-solid fa-database"></i> Yüklənmiş Scriptlər</div>
+                        <div class="panel-title"><i class="fa-solid fa-database"></i> Yüklenen Scriptler</div>
                     </div>
                     <table class="cyber-table">
                         <thead>
                             <tr>
-                                <th>Ad</th>
+                                <th>Adı</th>
                                 <th>Loadstring</th>
-                                <th>Əməliyyat</th>
+                                <th>İşlem</th>
                             </tr>
                         </thead>
                         <tbody id="scriptTableBody"></tbody>
@@ -697,27 +697,27 @@
                 </div>
             </div>
 
-            <!-- Qara Siyahı -->
+            <!-- Kara Liste -->
             <div id="tab-blacklist" class="tab-content">
                 <div class="panel-box">
                     <div class="panel-header">
-                        <div class="panel-title"><i class="fa-solid fa-ban"></i> Qara Siyahıya Əlavə Et</div>
+                        <div class="panel-title"><i class="fa-solid fa-ban"></i> Kara Listeye Ekle</div>
                     </div>
                     <div class="form-grid">
-                        <input type="text" id="blackId" class="cyber-input" placeholder="Roblox User ID və ya IP">
-                        <button onclick="addToBlacklist()" class="cyber-btn" style="margin-top:0;"><i class="fa-solid fa-user-slash"></i> Blokla</button>
+                        <input type="text" id="blackId" class="cyber-input" placeholder="Roblox User ID veya IP">
+                        <button onclick="addToBlacklist()" class="cyber-btn" style="margin-top:0;"><i class="fa-solid fa-user-slash"></i> Engelle</button>
                     </div>
                 </div>
                 <div class="panel-box">
                     <div class="panel-header">
-                        <div class="panel-title"><i class="fa-solid fa-list"></i> Bloklanmış İstifadəçilər</div>
+                        <div class="panel-title"><i class="fa-solid fa-list"></i> Engellenen Kullanıcılar</div>
                     </div>
                     <table class="cyber-table">
                         <thead>
                             <tr>
                                 <th>ID / IP</th>
-                                <th>Tarix</th>
-                                <th>Əməliyyat</th>
+                                <th>Tarih</th>
+                                <th>İşlem</th>
                             </tr>
                         </thead>
                         <tbody id="blacklistTableBody"></tbody>
@@ -738,7 +738,7 @@
                 document.getElementById('appContainer').style.display = 'grid';
                 loadData();
             } else {
-                err.textContent = "Səhv şifrə!";
+                err.textContent = "Hatalı şifre!";
             }
         }
 
@@ -750,7 +750,7 @@
             document.getElementById('currentTitle').textContent = el.textContent.trim();
         }
 
-        // Base64 Obfuscator (Executorlarda tam xətasız işləyən qoruma)
+        // Base64 Obfuscator (Executor uyumlu tam koruma)
         function obfuscateLua(code) {
             let encoded = btoa(unescape(encodeURIComponent(code)));
             return `local _C = "${encoded}"
@@ -800,7 +800,7 @@ _F(_S)()`;
             const duration = document.getElementById('keyDuration').value;
             for(let i=0; i<count; i++) {
                 let key = 'LESTA-' + Math.random().toString(36).substring(2, 8).toUpperCase() + '-' + Math.random().toString(36).substring(2, 6).toUpperCase();
-                appData.keys.push({ key, duration, status: 'Aktiv' });
+                appData.keys.push({ key, duration, status: 'Aktif' });
             }
             saveData();
         }
@@ -814,7 +814,7 @@ _F(_S)()`;
             const name = document.getElementById('scriptName').value.trim();
             const code = document.getElementById('scriptCode').value;
             if(!name || !code) {
-                alert("Zəhmət olmasa script adını və kodunu daxil edin!");
+                alert("Lütfen script adını ve kodunu eksiksiz girin!");
                 return;
             }
             const protectedCode = obfuscateLua(code);
@@ -824,7 +824,7 @@ _F(_S)()`;
             document.getElementById('scriptName').value = '';
             document.getElementById('scriptCode').value = '';
             saveData();
-            alert("Script başarıyla yüklendi və qorundu!");
+            alert("Script başarıyla yüklendi ve korundu!");
         }
 
         function deleteScript(index) {
@@ -835,13 +835,13 @@ _F(_S)()`;
         function copyLoadstring(id) {
             const link = window.location.origin + window.location.pathname + "?load=" + id;
             navigator.clipboard.writeText(`loadstring(game:HttpGet("${link}"))()`);
-            alert("Loadstring kopyalandı!");
+            alert("Loadstring başarıyla kopyalandı!");
         }
 
         function addToBlacklist() {
             const val = document.getElementById('blackId').value.trim();
             if(!val) return;
-            appData.blacklist.push({ id: val, date: new Date().toLocaleDateString() });
+            appData.blacklist.push({ id: val, date: new Date().toLocaleDateString('tr-TR') });
             document.getElementById('blackId').value = '';
             saveData();
         }
@@ -857,21 +857,21 @@ _F(_S)()`;
             appData.keys.forEach((k, idx) => {
                 kHtml += `<tr><td>${k.key}</td><td>${k.duration} Saat</td><td><span class="badge badge-success">${k.status}</span></td><td><button class="btn-icon danger" onclick="deleteKey(${idx})"><i class="fa-solid fa-trash"></i></button></td></tr>`;
             });
-            document.getElementById('keyTableBody').innerHTML = kHtml || '<tr><td colspan="4" style="text-align:center; color:var(--text-muted);">Açar yoxdur.</td></tr>';
+            document.getElementById('keyTableBody').innerHTML = kHtml || '<tr><td colspan="4" style="text-align:center; color:var(--text-muted);">Anahtar bulunmuyor.</td></tr>';
 
             // Scripts
             let sHtml = '';
             appData.scripts.forEach((s, idx) => {
                 sHtml += `<tr><td>${s.name}</td><td><button class="btn-icon" onclick="copyLoadstring('${s.id}')"><i class="fa-solid fa-copy"></i></button></td><td><button class="btn-icon danger" onclick="deleteScript(${idx})"><i class="fa-solid fa-trash"></i></button></td></tr>`;
             });
-            document.getElementById('scriptTableBody').innerHTML = sHtml || '<tr><td colspan="3" style="text-align:center; color:var(--text-muted);">Script yoxdur.</td></tr>';
+            document.getElementById('scriptTableBody').innerHTML = sHtml || '<tr><td colspan="3" style="text-align:center; color:var(--text-muted);">Script bulunmuyor.</td></tr>';
 
             // Blacklist
             let bHtml = '';
             appData.blacklist.forEach((b, idx) => {
                 bHtml += `<tr><td>${b.id}</td><td>${b.date}</td><td><button class="btn-icon danger" onclick="deleteBlacklist(${idx})"><i class="fa-solid fa-trash"></i></button></td></tr>`;
             });
-            document.getElementById('blacklistTableBody').innerHTML = bHtml || '<tr><td colspan="3" style="text-align:center; color:var(--text-muted);">Qara siyahı boşdur.</td></tr>';
+            document.getElementById('blacklistTableBody').innerHTML = bHtml || '<tr><td colspan="3" style="text-align:center; color:var(--text-muted);">Kara liste boş.</td></tr>';
         }
 
         // URL Loadstring handler
