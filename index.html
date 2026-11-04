@@ -1,1 +1,866 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LESTA HUB - Cyber Control V5.2</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-deep: #09090b;
+            --bg-card: #121216;
+            --border: #27272a;
+            --border-glow: rgba(168, 85, 247, 0.4);
+            --accent: #a855f7;
+            --accent-hover: #9333ea;
+            --accent-glow: rgba(168, 85, 247, 0.25);
+            --text-main: #f4f4f5;
+            --text-muted: #a1a1aa;
+            --success: #22c55e;
+            --danger: #ef4444;
+            --font-sans: 'Plus Jakarta Sans', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
 
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            outline: none;
+        }
+
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            font-family: var(--font-sans);
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .cyber-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(to right, rgba(168, 85, 247, 0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(168, 85, 247, 0.03) 1px, transparent 1px);
+            background-size: 32px 32px;
+            z-index: -1;
+        }
+
+        .ambient-glow {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(168, 85, 247, 0.1) 0%, rgba(9, 9, 11, 0) 70%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .auth-container {
+            width: 100%;
+            max-width: 420px;
+            padding: 2.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 30px var(--accent-glow);
+            text-align: center;
+            position: relative;
+            backdrop-filter: blur(12px);
+        }
+
+        .auth-icon {
+            width: 64px;
+            height: 64px;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid var(--border-glow);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            color: var(--accent);
+            font-size: 1.75rem;
+            box-shadow: 0 0 20px var(--accent-glow);
+        }
+
+        .auth-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+            margin-bottom: 0.5rem;
+            color: var(--text-main);
+        }
+
+        .auth-subtitle {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 1.25rem;
+            text-align: left;
+        }
+
+        .cyber-input {
+            width: 100%;
+            background: rgba(9, 9, 11, 0.6);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 0.875rem 1rem 0.875rem 2.75rem;
+            color: var(--text-main);
+            font-family: var(--font-mono);
+            font-size: 0.95rem;
+            transition: var(--transition);
+        }
+
+        .cyber-input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 15px var(--accent-glow);
+            background: rgba(9, 9, 11, 0.9);
+        }
+
+        .input-icon {
+            position: absolute;
+            top: 50%;
+            left: 1rem;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .cyber-input:focus ~ .input-icon {
+            color: var(--accent);
+        }
+
+        .cyber-btn {
+            width: 100%;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 0.875rem;
+            font-family: var(--font-sans);
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 4px 15px var(--accent-glow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .cyber-btn:hover {
+            background: var(--accent-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px var(--accent-glow);
+        }
+
+        .error-msg {
+            color: var(--danger);
+            font-size: 0.8rem;
+            margin-top: 0.75rem;
+            min-height: 1.2rem;
+            font-weight: 500;
+        }
+
+        .app-container {
+            display: none;
+            width: 100vw;
+            height: 100vh;
+            grid-template-columns: 260px 1fr;
+            grid-template-rows: 70px 1fr;
+            background: var(--bg-deep);
+        }
+
+        .sidebar {
+            grid-row: 1 / 3;
+            background: var(--bg-card);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            z-index: 10;
+        }
+
+        .sidebar-brand {
+            height: 70px;
+            display: flex;
+            align-items: center;
+            padding: 0 1.5rem;
+            gap: 0.75rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .brand-logo {
+            width: 36px;
+            height: 36px;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid var(--border-glow);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent);
+            font-size: 1.1rem;
+        }
+
+        .brand-text {
+            font-size: 1.1rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+            background: linear-gradient(135deg, #fff 0%, var(--text-muted) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-menu {
+            list-style: none;
+            padding: 1.5rem 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            flex-grow: 1;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 0.875rem;
+            padding: 0.875rem 1rem;
+            border-radius: 10px;
+            color: var(--text-muted);
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background: rgba(168, 85, 247, 0.1);
+            color: var(--accent);
+            border: 1px solid var(--border-glow);
+        }
+
+        .nav-item i {
+            font-size: 1.1rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .topbar {
+            grid-column: 2;
+            height: 70px;
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+            z-index: 5;
+        }
+
+        .topbar-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+        }
+
+        .status-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid var(--border-glow);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--accent);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.4; }
+            100% { opacity: 1; }
+        }
+
+        .main-content {
+            grid-column: 2;
+            padding: 2rem;
+            overflow-y: auto;
+            background: var(--bg-deep);
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .stat-card:hover {
+            border-color: var(--border-glow);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .stat-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .stat-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(168, 85, 247, 0.1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent);
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 800;
+            font-family: var(--font-mono);
+            color: var(--text-main);
+        }
+
+        .panel-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.25rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .panel-title {
+            font-size: 1rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .cyber-select, .cyber-textarea {
+            width: 100%;
+            background: rgba(9, 9, 11, 0.6);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            color: var(--text-main);
+            font-family: var(--font-sans);
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+
+        .cyber-select:focus, .cyber-textarea:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 12px var(--accent-glow);
+        }
+
+        .cyber-textarea {
+            resize: vertical;
+            min-height: 120px;
+            font-family: var(--font-mono);
+        }
+
+        .cyber-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.9rem;
+        }
+
+        .cyber-table th {
+            background: rgba(9, 9, 11, 0.4);
+            color: var(--text-muted);
+            font-weight: 600;
+            padding: 0.875rem 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .cyber-table td {
+            padding: 0.875rem 1rem;
+            border-bottom: 1px solid var(--border);
+            color: var(--text-main);
+            font-family: var(--font-mono);
+        }
+
+        .cyber-table tr:hover td {
+            background: rgba(168, 85, 247, 0.02);
+        }
+
+        .badge {
+            padding: 0.25rem 0.6rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .badge-success { background: rgba(34, 197, 94, 0.15); color: var(--success); border: 1px solid rgba(34, 197, 94, 0.3); }
+        .badge-danger { background: rgba(239, 68, 68, 0.15); color: var(--danger); border: 1px solid rgba(239, 68, 68, 0.3); }
+
+        .btn-icon {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-icon:hover {
+            background: var(--accent);
+            border-color: var(--accent);
+            box-shadow: 0 0 10px var(--accent-glow);
+        }
+
+        .btn-icon.danger:hover {
+            background: var(--danger);
+            border-color: var(--danger);
+            box-shadow: 0 0 10px rgba(239, 68, 68, 0.3);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="cyber-grid"></div>
+    <div class="ambient-glow"></div>
+
+    <!-- Giriş Bölümü -->
+    <div id="authScreen" class="auth-container">
+        <div class="auth-icon">
+            <i class="fa-solid fa-shield-halved"></i>
+        </div>
+        <h1 class="auth-title">LESTA HUB</h1>
+        <p class="auth-subtitle">Erişim şifresini girin</p>
+        <div class="input-group">
+            <input type="password" id="passcode" class="cyber-input" placeholder="Şifre...">
+            <i class="fa-solid fa-key input-icon"></i>
+        </div>
+        <button onclick="checkAuth()" class="cyber-btn">
+            <i class="fa-solid fa-right-to-bracket"></i> Giriş Yap
+        </button>
+        <div id="authError" class="error-msg"></div>
+    </div>
+
+    <!-- Ana Panel -->
+    <div id="appContainer" class="app-container">
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <div class="brand-logo">
+                    <i class="fa-solid fa-cube"></i>
+                </div>
+                <span class="brand-text">LESTA HUB</span>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item active" onclick="switchTab('overview', this)">
+                    <i class="fa-solid fa-chart-pie"></i> Genel Bakış
+                </li>
+                <li class="nav-item" onclick="switchTab('players', this)">
+                    <i class="fa-solid fa-users"></i> Oyuncular
+                </li>
+                <li class="nav-item" onclick="switchTab('keys', this)">
+                    <i class="fa-solid fa-ticket"></i> Lisans / Anahtar
+                </li>
+                <li class="nav-item" onclick="switchTab('scripts', this)">
+                    <i class="fa-solid fa-code"></i> Script Merkezi
+                </li>
+                <li class="nav-item" onclick="switchTab('blacklist', this)">
+                    <i class="fa-solid fa-ban"></i> Kara Liste
+                </li>
+            </ul>
+        </aside>
+
+        <header class="topbar">
+            <div class="topbar-title" id="currentTitle">Genel Bakış</div>
+            <div class="topbar-right">
+                <div class="status-badge">
+                    <div class="status-dot"></div> Lesta Hub v5.2
+                </div>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <!-- Genel Bakış -->
+            <div id="tab-overview" class="tab-content active">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-title">Aktif Oyuncular</span>
+                            <div class="stat-icon"><i class="fa-solid fa-user-group"></i></div>
+                        </div>
+                        <div class="stat-value" id="statPlayers">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-title">Aktif Anahtarlar</span>
+                            <div class="stat-icon"><i class="fa-solid fa-key"></i></div>
+                        </div>
+                        <div class="stat-value" id="statKeys">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-title">Script Sayısı</span>
+                            <div class="stat-icon"><i class="fa-solid fa-file-code"></i></div>
+                        </div>
+                        <div class="stat-value" id="statScripts">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-title">Kara Liste</span>
+                            <div class="stat-icon"><i class="fa-solid fa-ban"></i></div>
+                        </div>
+                        <div class="stat-value" id="statBlacklist">0</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Oyuncular -->
+            <div id="tab-players" class="tab-content">
+                <div class="panel-box">
+                    <div class="panel-header">
+                        <div class="panel-title"><i class="fa-solid fa-users"></i> Canlı Oyuncu Takibi</div>
+                    </div>
+                    <table class="cyber-table">
+                        <thead>
+                            <tr>
+                                <th>Oyuncu Adı</th>
+                                <th>ID</th>
+                                <th>Sunucu IP</th>
+                                <th>Durum</th>
+                            </tr>
+                        </thead>
+                        <tbody id="playerTableBody">
+                            <tr><td colspan="4" style="text-align: center; color: var(--text-muted);">Aktif oyuncu bulunmuyor.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Lisans / Anahtarlar -->
+            <div id="tab-keys" class="tab-content">
+                <div class="panel-box">
+                    <div class="panel-header">
+                        <div class="panel-title"><i class="fa-solid fa-ticket"></i> Toplu Anahtar Üretici</div>
+                    </div>
+                    <div class="form-grid">
+                        <input type="number" id="keyCount" class="cyber-input" placeholder="Adet (Örn: 5)" min="1" value="1">
+                        <select id="keyDuration" class="cyber-select">
+                            <option value="1">1 Saat</option>
+                            <option value="24">1 Gün</option>
+                            <option value="168">1 Hafta</option>
+                            <option value="720">1 Ay</option>
+                        </select>
+                        <button onclick="generateKeys()" class="cyber-btn" style="margin-top:0;"><i class="fa-solid fa-plus"></i> Anahtar Üret</button>
+                    </div>
+                </div>
+                <div class="panel-box">
+                    <div class="panel-header">
+                        <div class="panel-title"><i class="fa-solid fa-list"></i> Üretilen Anahtarlar</div>
+                    </div>
+                    <table class="cyber-table">
+                        <thead>
+                            <tr>
+                                <th>Anahtar</th>
+                                <th>Süre</th>
+                                <th>Durum</th>
+                                <th>İşlem</th>
+                            </tr>
+                        </thead>
+                        <tbody id="keyTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Script Merkezi -->
+            <div id="tab-scripts" class="tab-content">
+                <div class="panel-box">
+                    <div class="panel-header">
+                        <div class="panel-title"><i class="fa-solid fa-code"></i> Script Ekle / Yönet</div>
+                    </div>
+                    <div class="form-grid" style="grid-template-columns: 1fr;">
+                        <input type="text" id="scriptName" class="cyber-input" placeholder="Script Adı (Örn: Duel V2)">
+                        <textarea id="scriptCode" class="cyber-textarea" placeholder="Orijinal Lua kodunu buraya yazın..."></textarea>
+                        <button onclick="saveScript()" class="cyber-btn"><i class="fa-solid fa-upload"></i> Script Yükle</button>
+                    </div>
+                </div>
+                <div class="panel-box">
+                    <div class="panel-header">
+                        <div class="panel-title"><i class="fa-solid fa-database"></i> Yüklenen Scriptler & Loadstring</div>
+                    </div>
+                    <table class="cyber-table">
+                        <thead>
+                            <tr>
+                                <th>Adı</th>
+                                <th>Loadstring Kopyala</th>
+                                <th>İşlem</th>
+                            </tr>
+                        </thead>
+                        <tbody id="scriptTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Kara Liste -->
+            <div id="tab-blacklist" class="tab-content">
+                <div class="panel-box">
+                    <div class="panel-header">
+                        <div class="panel-title"><i class="fa-solid fa-ban"></i> Kara Listeye Ekle</div>
+                    </div>
+                    <div class="form-grid">
+                        <input type="text" id="blackId" class="cyber-input" placeholder="Roblox User ID veya IP">
+                        <button onclick="addToBlacklist()" class="cyber-btn" style="margin-top:0;"><i class="fa-solid fa-user-slash"></i> Engelle</button>
+                    </div>
+                </div>
+                <div class="panel-box">
+                    <div class="panel-header">
+                        <div class="panel-title"><i class="fa-solid fa-list"></i> Engellenen Kullanıcılar</div>
+                    </div>
+                    <table class="cyber-table">
+                        <thead>
+                            <tr>
+                                <th>ID / IP</th>
+                                <th>Tarih</th>
+                                <th>İşlem</th>
+                            </tr>
+                        </thead>
+                        <tbody id="blacklistTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const CORRECT_PASS = "lesta4ever437";
+
+        function checkAuth() {
+            const pass = document.getElementById('passcode').value;
+            const err = document.getElementById('authError');
+            if (pass === CORRECT_PASS) {
+                document.getElementById('authScreen').style.display = 'none';
+                document.getElementById('appContainer').style.display = 'grid';
+                loadData();
+            } else {
+                err.textContent = "Hatalı şifre!";
+            }
+        }
+
+        function switchTab(tabId, el) {
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+            document.getElementById('tab-' + tabId).classList.add('active');
+            el.classList.add('active');
+            document.getElementById('currentTitle').textContent = el.textContent.trim();
+        }
+
+        let appData = {
+            keys: JSON.parse(localStorage.getItem('lesta_keys') || '[]'),
+            scripts: JSON.parse(localStorage.getItem('lesta_scripts') || '[]'),
+            blacklist: JSON.parse(localStorage.getItem('lesta_blacklist') || '[]')
+        };
+
+        function saveData() {
+            localStorage.setItem('lesta_keys', JSON.stringify(appData.keys));
+            localStorage.setItem('lesta_scripts', JSON.stringify(appData.scripts));
+            localStorage.setItem('lesta_blacklist', JSON.stringify(appData.blacklist));
+            updateStats();
+        }
+
+        function updateStats() {
+            document.getElementById('statPlayers').textContent = "0";
+            document.getElementById('statKeys').textContent = appData.keys.length;
+            document.getElementById('statScripts').textContent = appData.scripts.length;
+            document.getElementById('statBlacklist').textContent = appData.blacklist.length;
+            renderTables();
+        }
+
+        function generateKeys() {
+            const count = parseInt(document.getElementById('keyCount').value) || 1;
+            const duration = document.getElementById('keyDuration').value;
+            for(let i=0; i<count; i++) {
+                let key = 'LESTA-' + Math.random().toString(36).substring(2, 8).toUpperCase() + '-' + Math.random().toString(36).substring(2, 6).toUpperCase();
+                appData.keys.push({ key, duration, status: 'Aktif' });
+            }
+            saveData();
+        }
+
+        function deleteKey(index) {
+            appData.keys.splice(index, 1);
+            saveData();
+        }
+
+        function saveScript() {
+            const name = document.getElementById('scriptName').value.trim();
+            const code = document.getElementById('scriptCode').value;
+            if(!name || !code) {
+                alert("Lütfen script adını ve kodunu eksiksiz girin!");
+                return;
+            }
+            const scriptId = 'script_' + Date.now();
+            appData.scripts.push({ id: scriptId, name, code });
+            document.getElementById('scriptName').value = '';
+            document.getElementById('scriptCode').value = '';
+            saveData();
+            alert("Script başarıyla yüklendi!");
+        }
+
+        function deleteScript(index) {
+            appData.scripts.splice(index, 1);
+            saveData();
+        }
+
+        function copyLoadstring(id) {
+            const link = window.location.origin + window.location.pathname + "?load=" + id;
+            const loadstringText = `loadstring(game:HttpGet("${link}"))()`;
+            navigator.clipboard.writeText(loadstringText).then(() => {
+                alert("Loadstring kopyalandı:\n" + loadstringText);
+            }).catch(err => {
+                prompt("Kopyalamak için bu metni seçin:", loadstringText);
+            });
+        }
+
+        function addToBlacklist() {
+            const val = document.getElementById('blackId').value.trim();
+            if(!val) return;
+            appData.blacklist.push({ id: val, date: new Date().toLocaleDateString('tr-TR') });
+            document.getElementById('blackId').value = '';
+            saveData();
+        }
+
+        function deleteBlacklist(index) {
+            appData.blacklist.splice(index, 1);
+            saveData();
+        }
+
+        function renderTables() {
+            // Keys
+            let kHtml = '';
+            appData.keys.forEach((k, idx) => {
+                kHtml += `<tr><td>${k.key}</td><td>${k.duration} Saat</td><td><span class="badge badge-success">${k.status}</span></td><td><button class="btn-icon danger" onclick="deleteKey(${idx})"><i class="fa-solid fa-trash"></i></button></td></tr>`;
+            });
+            document.getElementById('keyTableBody').innerHTML = kHtml || '<tr><td colspan="4" style="text-align:center; color:var(--text-muted);">Anahtar bulunmuyor.</td></tr>';
+
+            // Scripts
+            let sHtml = '';
+            appData.scripts.forEach((s, idx) => {
+                sHtml += `<tr><td>${s.name}</td><td><button class="cyber-btn" style="margin:0; padding:0.4rem 0.8rem; font-size:0.8rem;" onclick="copyLoadstring('${s.id}')"><i class="fa-solid fa-copy"></i> Loadstring Kopyala</button></td><td><button class="btn-icon danger" onclick="deleteScript(${idx})"><i class="fa-solid fa-trash"></i></button></td></tr>`;
+            });
+            document.getElementById('scriptTableBody').innerHTML = sHtml || '<tr><td colspan="3" style="text-align:center; color:var(--text-muted);">Script bulunmuyor.</td></tr>';
+
+            // Blacklist
+            let bHtml = '';
+            appData.blacklist.forEach((b, idx) => {
+                bHtml += `<tr><td>${b.id}</td><td>${b.date}</td><td><button class="btn-icon danger" onclick="deleteBlacklist(${idx})"><i class="fa-solid fa-trash"></i></button></td></tr>`;
+            });
+            document.getElementById('blacklistTableBody').innerHTML = bHtml || '<tr><td colspan="3" style="text-align:center; color:var(--text-muted);">Kara liste boş.</td></tr>';
+        }
+
+        // URL Loadstring handler
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const loadId = urlParams.get('load');
+            if(loadId) {
+                const scripts = JSON.parse(localStorage.getItem('lesta_scripts') || '[]');
+                const target = scripts.find(s => s.id === loadId);
+                if(target) {
+                    document.open();
+                    document.write(target.code);
+                    document.close();
+                    return;
+                }
+            }
+            updateStats();
+        };
+    </script>
+</body>
+</html>
