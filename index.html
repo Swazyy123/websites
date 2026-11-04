@@ -309,7 +309,7 @@
 
         .code-box {
             background: #090a0f;
-            border: 1px solid #1a1e2e;
+            border: 1px border #1a1e2e;
             padding: 10px;
             border-radius: 4px;
             font-family: monospace;
@@ -317,7 +317,6 @@
             color: var(--accent-cyan);
             margin-top: 8px;
             word-break: break-all;
-            white-space: pre-line;
         }
 
         /* Modal Popup */
@@ -596,6 +595,7 @@
     <script>
         const AUTH_CODE = "lesta4ever437";
 
+        // State Data
         let scripts = JSON.parse(localStorage.getItem('lesta_scripts')) || [
             { id: 'sc_1', name: 'DUEL V2', code: 'print("DUEL V2 Loaded!")' }
         ];
@@ -623,6 +623,8 @@
             renderPlayers();
             updateDropdowns();
             updateStats();
+
+            // Auto key expiration check loop
             setInterval(checkExpiredKeys, 5000);
         }
 
@@ -640,29 +642,6 @@
             element.classList.add('active');
         }
 
-        // GÜÇLÜ LURAPH / BYTECODE SEVİYELİ OBFUSCATOR QATMANI
-        function lestaObfuscate(luaCode) {
-            let encoded = btoa(unescape(encodeURIComponent(luaCode)));
-            return `-- [LESTA HUB V5.2 PROTECTED LURAPH ENGINE]
-local _E = "${encoded}";
-local function _D(d)
-    local b = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
-    d = string.gsub(d, '[^'..b..'=]', '')
-    return (d:gsub('.', function(x)
-        if (x == '=') then return '' end
-        local r,f='',(b:find(x)-1)
-        for i=6,1,-1 do r=r..(f%2^i-f%2^(i-1)>0 and '1' or '0') end
-        return r;
-    end):gsub('%d%d%d?%d?%d?%d?%d?%d?', function(x)
-        if (#x ~= 8) then return '' end
-        local c=0
-        for i=1,8 do c=c+(x:sub(i,i)=='1' and 2^(8-i) or 0) end
-        return string.char(c)
-    end))
-end
-loadstring(_D(_E))()`;
-        }
-
         /* SCRİPT MERKEZİ */
         function uploadScript() {
             const name = document.getElementById('script-name-input').value.trim();
@@ -673,7 +652,7 @@ loadstring(_D(_E))()`;
             const newScript = {
                 id: 'sc_' + Date.now(),
                 name: name,
-                code: lestaObfuscate(code)
+                code: code
             };
 
             scripts.push(newScript);
@@ -683,7 +662,6 @@ loadstring(_D(_E))()`;
 
             document.getElementById('script-name-input').value = '';
             document.getElementById('script-code-input').value = '';
-            alert("Script başarıyla yüklendi ve Luraph düzeyinde korundu!");
         }
 
         function renderScripts() {
@@ -691,7 +669,7 @@ loadstring(_D(_E))()`;
             container.innerHTML = '';
 
             scripts.forEach(sc => {
-                const loadstringCode = `script_key = "KEY-EKLE"\nloadstring(game:HttpGet("${window.location.origin + window.location.pathname}?load=${sc.id}"))()`;
+                const loadstringCode = `script_key = "KEY-EKLE";\nloadstring(game:HttpGet("https://lestahub.com/raw/${sc.id}"))()`;
                 
                 const card = document.createElement('div');
                 card.className = 'item-card';
@@ -701,7 +679,7 @@ loadstring(_D(_E))()`;
                         <div class="code-box">${loadstringCode}</div>
                     </div>
                     <div style="display: flex; gap: 8px;">
-                        <button class="btn btn-cyan btn-sm" onclick="copyToClipboard(\`${loadstringCode}\`)">Kopyala</button>
+                        <button class="btn btn-cyan btn-sm" onclick="copyToClipboard('${loadstringCode.replace(/\n/g, ' ')}')">Kopyala</button>
                         <button class="btn btn-sm" style="background:#555;" onclick="openUpdateModal('${sc.id}')">UPDATE</button>
                         <button class="btn btn-danger btn-sm" onclick="deleteScript('${sc.id}')">Sil</button>
                     </div>
@@ -723,7 +701,7 @@ loadstring(_D(_E))()`;
 
             document.getElementById('update-script-id').value = sc.id;
             document.getElementById('update-script-name').value = sc.name;
-            document.getElementById('update-script-code').value = '';
+            document.getElementById('update-script-code').value = sc.code;
             document.getElementById('update-modal').style.display = 'flex';
         }
 
@@ -734,17 +712,13 @@ loadstring(_D(_E))()`;
         function saveScriptUpdate() {
             const id = document.getElementById('update-script-id').value;
             const sc = scripts.find(s => s.id === id);
-            const newName = document.getElementById('update-script-name').value.trim();
-            const newCode = document.getElementById('update-script-code').value.trim();
-
             if (sc) {
-                if (newName) sc.name = newName;
-                if (newCode) sc.code = lestaObfuscate(newCode);
+                sc.name = document.getElementById('update-script-name').value;
+                sc.code = document.getElementById('update-script-code').value;
                 saveData();
                 renderScripts();
                 updateDropdowns();
                 closeModal();
-                alert("Script başarıyla güncellendi (Loadstring sabit kaldı)!");
             }
         }
 
@@ -759,6 +733,7 @@ loadstring(_D(_E))()`;
 
             const keyStr = customKey || 'LESTA-' + Math.random().toString(36).substring(2, 10).toUpperCase();
             
+            // Calculate Expiration
             let expireMs = Date.now();
             if (unit === 'Dakika') expireMs += duration * 60 * 1000;
             if (unit === 'Saat') expireMs += duration * 3600 * 1000;
@@ -776,7 +751,6 @@ loadstring(_D(_E))()`;
             keys.push(newKey);
             saveData();
             renderKeys();
-            alert("Key başarıyla oluşturuldu!");
         }
 
         function renderKeys() {
@@ -808,7 +782,7 @@ loadstring(_D(_E))()`;
             keys = keys.filter(k => {
                 if (now > k.expireAt) {
                     changed = true;
-                    return false;
+                    return false; // Automatically delete expired key
                 }
                 return true;
             });
@@ -920,69 +894,38 @@ loadstring(_D(_E))()`;
             renderBlacklist();
         }
 
-        /* YARDIMÇI FUNKSİYALAR */
+        /* HELPER FUNCTIONS */
         function updateDropdowns() {
-            const quickSelect = document.getElementById('quick-target-script');
-            const keySelect = document.getElementById('key-target-script');
-
-            quickSelect.innerHTML = '';
-            keySelect.innerHTML = '';
-
-            if (scripts.length === 0) {
-                const opt = document.createElement('option');
-                opt.value = '';
-                opt.textContent = 'Önce Script Ekleyin';
-                quickSelect.appendChild(opt);
-                keySelect.appendChild(opt.cloneNode(true));
-                return;
-            }
-
-            scripts.forEach(sc => {
-                const opt = document.createElement('option');
-                opt.value = sc.name;
-                opt.textContent = sc.name;
-
-                quickSelect.appendChild(opt);
-                keySelect.appendChild(opt.cloneNode(true));
+            const selects = [document.getElementById('quick-target-script'), document.getElementById('key-target-script')];
+            selects.forEach(sel => {
+                sel.innerHTML = '';
+                scripts.forEach(s => {
+                    const opt = document.createElement('option');
+                    opt.value = s.name;
+                    opt.innerText = s.name;
+                    sel.appendChild(opt);
+                });
             });
         }
 
         function updateStats() {
-            document.getElementById('stat-scripts').textContent = scripts.length;
-            document.getElementById('stat-keys').textContent = keys.length;
-            document.getElementById('stat-active-keys').textContent = keys.filter(k => !k.used).length;
-            document.getElementById('stat-used-keys').textContent = keys.filter(k => k.used).length;
-            document.getElementById('stat-bans').textContent = blacklist.length;
-            document.getElementById('stat-in-game').textContent = players.length;
+            document.getElementById('stat-scripts').innerText = scripts.length;
+            document.getElementById('stat-keys').innerText = keys.length;
+            document.getElementById('stat-active-keys').innerText = keys.filter(k => !k.used).length;
+            document.getElementById('stat-used-keys').innerText = keys.filter(k => k.used).length;
+            document.getElementById('stat-bans').innerText = blacklist.length;
+            document.getElementById('stat-in-game').innerText = players.length;
 
-            document.getElementById('count-players').textContent = players.length;
-            document.getElementById('count-keys').textContent = keys.length;
-            document.getElementById('count-scripts').textContent = scripts.length;
-            document.getElementById('count-bans').textContent = blacklist.length;
+            document.getElementById('count-players').innerText = players.length;
+            document.getElementById('count-keys').innerText = keys.length;
+            document.getElementById('count-scripts').innerText = scripts.length;
+            document.getElementById('count-bans').innerText = blacklist.length;
         }
 
         function copyToClipboard(text) {
-            navigator.clipboard.writeText(text).then(() => {
-                alert("Pano kopyalandı!");
-            }).catch(() => {
-                prompt("Kopyalamak için metni seçin:", text);
-            });
+            navigator.clipboard.writeText(text);
+            alert("Kopyalandı!");
         }
-
-        window.onload = function() {
-            const params = new URLSearchParams(window.location.search);
-            const loadId = params.get('load');
-            if (loadId) {
-                const target = scripts.find(s => s.id === loadId);
-                if (target) {
-                    document.open();
-                    document.write(target.code);
-                    document.close();
-                    return;
-                }
-            }
-            initApp();
-        };
     </script>
 </body>
 </html>
