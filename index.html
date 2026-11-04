@@ -317,6 +317,7 @@
             color: var(--accent-cyan);
             margin-top: 8px;
             word-break: break-all;
+            white-space: pre-line;
         }
 
         /* Modal Popup */
@@ -639,7 +640,7 @@
             element.classList.add('active');
         }
 
-        // GÜÇLÜ LURAPH / BYTECODE SEVİYELİ OBUSCATOR QATMANI
+        // GÜÇLÜ LURAPH / BYTECODE SEVİYELİ OBFUSCATOR QATMANI
         function lestaObfuscate(luaCode) {
             let encoded = btoa(unescape(encodeURIComponent(luaCode)));
             return `-- [LESTA HUB V5.2 PROTECTED LURAPH ENGINE]
@@ -672,7 +673,7 @@ loadstring(_D(_E))()`;
             const newScript = {
                 id: 'sc_' + Date.now(),
                 name: name,
-                code: lestaObfuscate(code) // Güçlü şifrələmə tətbiq olunur
+                code: lestaObfuscate(code)
             };
 
             scripts.push(newScript);
@@ -690,8 +691,7 @@ loadstring(_D(_E))()`;
             container.innerHTML = '';
 
             scripts.forEach(sc => {
-                // İstədiyin tam loadstring formatı: script_key = "KEY-EKLE"
-                const loadstringCode = `script_key = "KEY-EKLE"; loadstring(game:HttpGet("https://lestahub.com/raw/${sc.id}"))()`;
+                const loadstringCode = `script_key = "KEY-EKLE"\nloadstring(game:HttpGet("${window.location.origin + window.location.pathname}?load=${sc.id}"))()`;
                 
                 const card = document.createElement('div');
                 card.className = 'item-card';
@@ -701,7 +701,7 @@ loadstring(_D(_E))()`;
                         <div class="code-box">${loadstringCode}</div>
                     </div>
                     <div style="display: flex; gap: 8px;">
-                        <button class="btn btn-cyan btn-sm" onclick="copyToClipboard('${loadstringCode}')">Kopyala</button>
+                        <button class="btn btn-cyan btn-sm" onclick="copyToClipboard(\`${loadstringCode}\`)">Kopyala</button>
                         <button class="btn btn-sm" style="background:#555;" onclick="openUpdateModal('${sc.id}')">UPDATE</button>
                         <button class="btn btn-danger btn-sm" onclick="deleteScript('${sc.id}')">Sil</button>
                     </div>
@@ -723,7 +723,7 @@ loadstring(_D(_E))()`;
 
             document.getElementById('update-script-id').value = sc.id;
             document.getElementById('update-script-name').value = sc.name;
-            document.getElementById('update-script-code').value = ''; // Yeni kod girişi üçün təmizlənir
+            document.getElementById('update-script-code').value = '';
             document.getElementById('update-modal').style.display = 'flex';
         }
 
@@ -739,7 +739,7 @@ loadstring(_D(_E))()`;
 
             if (sc) {
                 if (newName) sc.name = newName;
-                if (newCode) sc.code = lestaObfuscate(newCode); // Loadstring dəyişmədən yalnız kod şifrələnərək yenilənir
+                if (newCode) sc.code = lestaObfuscate(newCode);
                 saveData();
                 renderScripts();
                 updateDropdowns();
@@ -969,7 +969,6 @@ loadstring(_D(_E))()`;
             });
         }
 
-        // URL üzerinden loadstring istəyi gəldikdə şifrələnmiş kodu ötürmək üçün handler
         window.onload = function() {
             const params = new URLSearchParams(window.location.search);
             const loadId = params.get('load');
