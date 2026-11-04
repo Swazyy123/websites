@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Lesta Hub</title>
+<style>
+:root{--bg:#05060b;--c:#0d1019;--b:#1c2233;--t:#e8ecf7;--m:#6b7794;--g:linear-gradient(90deg,#8b5cf6,#06b6d4)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--t);font:14px 'Segoe UI',sans-serif}
+header{display:flex;align-items:center;gap:12px;padding:14px 28px;border-bottom:1px solid var(--b)}
+header b{letter-spacing:2px;font-size:18px}header small{background:#6d4de6;padding:3px 9px;border-radius:6px;font-size:10px;font-weight:700;letter-spacing:1px}
+nav{display:flex;gap:6px;padding:0 28px;border-bottom:1px solid var(--b);overflow-x:auto}
+nav button{background:none;border:0;border-bottom:2px solid transparent;color:var(--m);padding:16px 18px;cursor:pointer;font-size:14px;white-space:nowrap}
+nav button.on{color:var(--t);border-color:#8b5cf6}
+.n{background:#7c4dff;color:#fff;border-radius:99px;padding:1px 8px;font-size:11px;font-weight:700;margin-left:6px}
+main{max-width:1520px;margin:28px auto;padding:0 20px}.tab{display:none}.tab.on{display:block}
+.card{background:var(--c);border:1px solid var(--b);border-left:3px solid #7c5cf0;border-radius:16px;padding:24px;margin-bottom:22px}
+h3{margin:0 0 18px;font-size:15px;letter-spacing:1px}
+label{display:block;color:var(--m);font-size:11px;letter-spacing:1.5px;font-weight:700;margin:0 0 7px}
+input,select,textarea{width:100%;background:#05060a;border:1px solid var(--b);border-radius:10px;color:var(--t);padding:14px;font:inherit}
+textarea{min-height:200px;font-family:Consolas,monospace;resize:vertical}
+.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-bottom:14px}
+.btn{width:100%;border:0;border-radius:10px;padding:14px;color:#fff;font-weight:700;letter-spacing:1px;cursor:pointer;background:var(--g)}
+.red{background:linear-gradient(90deg,#dc3535,#ef4444)}
+.sm{width:auto;padding:7px 14px;font-size:12px;border-radius:8px;background:#1a2133;border:1px solid var(--b)}.sm.red{background:#3b1519;border-color:#6b1d24}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:22px}
+.stat{background:var(--c);border:1px solid var(--b);border-radius:14px;padding:20px}.stat span{color:var(--m);font-size:11px;letter-spacing:2px}.stat b{display:block;font-size:30px;margin-top:10px}
+.it{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;background:#0a0d15;border-left:3px solid #7c5cf0;border-radius:10px;padding:14px 18px;margin-bottom:10px}
+.it small{color:var(--m)}pre{margin:8px 0 0;background:#05060a;border:1px solid var(--b);border-radius:8px;padding:10px;font-size:12px;white-space:pre-wrap;word-break:break-all;color:#9be7ff}
+.tag{padding:3px 10px;border-radius:6px;font-size:11px;font-weight:700}.ok{background:#10351f;color:#34d399}.no{background:#3b1519;color:#f87171}
+.emp{text-align:center;color:var(--m);padding:30px}.acts{display:flex;gap:8px;align-items:center}
+#login{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:9}
+#login div{width:340px}#md{position:fixed;inset:0;background:#000b;display:none;align-items:center;justify-content:center;z-index:8}
+#md .card{width:min(700px,94%);margin:0}#toast{position:fixed;top:20px;right:20px;background:#10b981;padding:12px 22px;border-radius:10px;font-weight:600;display:none;z-index:20}
+</style></head><body>
+<div id="login"><div class="card"><h3>⚡ LESTA HUB</h3><label>ERİŞİM KODU</label><input id="code" type="password" placeholder="Kodu gir" onkeydown="if(event.key=='Enter')go()"><br><br><button class="btn" onclick="go()">GİRİŞ</button><p id="le" style="color:#f87171;margin:12px 0 0"></p></div></div>
+<header><b>LESTA HUB</b><small>CYBER V5.2</small><span style="flex:1"></span><button class="btn sm" onclick="load(1)">🔄 Yenile</button></header>
+<nav id="nav"></nav>
+<main>
+<section class="tab on" id="t-ov">
+ <div class="stats" id="stats"></div>
+ <div class="card"><h3>⚡ HIZLI TOPLU KEY ÜRETİCİ</h3><div class="row">
+  <div><label>HEDEF SCRİPT</label><select class="sel" id="qs"></select></div>
+  <div><label>SÜRE</label><select id="qd"><option value="1|Saat">1 Saat</option><option value="1|Gün" selected>1 Gün</option><option value="7|Gün">7 Gün</option><option value="30|Gün">30 Gün</option></select></div>
+  <div><label>MİKTAR</label><select id="qq"><option>1</option><option>5</option><option>10</option><option>25</option><option>50</option></select></div></div>
+  <button class="btn" onclick="quick()">⚡ TOPLU KEY ÜRET VE PANOYA KOPYALA</button></div>
+ <div class="card"><h3>📋 SON ÇALIŞTIRMALAR</h3><div id="runs"></div></div>
+</section>
+<section class="tab" id="t-live"><div class="card"><h3>🟢 CANLI OYUNCULAR</h3><div id="live"></div></div></section>
+<section class="tab" id="t-keys">
+ <div class="card"><h3>🔑 YENİ KEY OLUŞTUR</h3><div class="row">
+  <div><label>HEDEF SCRİPT</label><select class="sel" id="ks"></select></div>
+  <div><label>SÜRE</label><input id="ka" type="number" value="60" min="1"></div>
+  <div><label>BİRİM</label><select id="ku"><option>Dakika</option><option>Saat</option><option>Gün</option><option>Hafta</option><option>Ay</option></select></div></div>
+  <div class="row"><div><label>NOT</label><input id="kn" placeholder="VIP müşteri"></div><div><label>ÖZEL KEY</label><input id="kc" placeholder="Boş = otomatik"></div></div>
+  <button class="btn" onclick="mkKey()">🔑 KEY OLUŞTUR</button></div>
+ <div class="card"><h3>🗝️ KEYLER</h3><div id="keys"></div></div>
+</section>
+<section class="tab" id="t-sc">
+ <div class="card"><h3>💾 YENİ SCRİPT YÜKLE</h3>
+  <label>SCRİPT ADI</label><input id="sn" placeholder="DUEL V2"><br><br>
+  <label>LUA SCRİPT KODU</label><textarea id="sc" placeholder="-- Lua kodunu buraya yapıştır"></textarea>
+  <p><label style="display:flex;gap:8px;align-items:center;font-size:12px"><input type="checkbox" id="sk" style="width:auto"> KEYSİZ SCRİPT (key sorulmaz)</label></p>
+  <button class="btn" onclick="upSc()">💾 SCRİPT YÜKLE</button></div>
+ <div class="card"><h3>📦 SCRİPTLER</h3><div id="scl"></div></div>
+</section>
+<section class="tab" id="t-ban">
+ <div class="card"><h3>🚫 ROBLOX KARA LİSTE</h3><div class="row">
+  <div><label>ROBLOX KULLANICI ADI (veya ID)</label><input id="bn" placeholder="Kullanıcı adı"></div>
+  <div><label>SEBEP</label><input id="br" placeholder="Yetkisiz paylaşım"></div></div>
+  <button class="btn red" onclick="ban()">🚫 KULLANICIYI YASAKLA</button></div>
+ <div class="card"><h3>📋 YASAKLI KULLANICILAR</h3><div id="bl"></div></div>
+</section>
+</main>
+<div id="md"><div class="card"><h3>✏️ SCRİPT GÜNCELLE</h3><label>YENİ SCRİPT ADI</label><input id="un"><br><br><label>YENİ LUA KODU</label><textarea id="uc" placeholder="Boş bırakırsan kod değişmez"></textarea><br><div class="acts"><button class="btn" onclick="upd()">GÜNCELLE</button><button class="btn sm" style="width:140px" onclick="md.style.display='none'">İPTAL</button></div></div></div>
+<div id="toast"></div>
+<script>
+const $=i=>document.getElementById(i),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let T=localStorage.lt||'',S=null,uid=null;
+const tabs=[['ov','📊 Genel Bakış'],['live','📡 Canlı Oyuncular','live'],['keys','🔑 Lisans & Key','keys'],['sc','💾 Script Merkezi','scripts'],['ban','🚫 Kara Liste','bans']];
+function nav(){$('nav').innerHTML=tabs.map(([k,n,c])=>`<button data-k="${k}" onclick="tab('${k}')">${n}${c&&S?`<span class="n">${c=='live'?S.stats.live:c=='keys'?S.stats.keys:c=='scripts'?S.stats.scripts:S.stats.bans}</span>`:''}</button>`).join('');tab(window.cur||'ov')}
+function tab(k){window.cur=k;document.querySelectorAll('.tab').forEach(e=>e.classList.toggle('on',e.id=='t-'+k));document.querySelectorAll('#nav button').forEach(e=>e.classList.toggle('on',e.dataset.k==k))}
+function toast(t,e){const x=$('toast');x.textContent=t;x.style.background=e?'#dc2626':'#10b981';x.style.display='block';setTimeout(()=>x.style.display='none',2000)}
+async function api(m,u,b){const r=await fetch(u,{method:m,headers:{'Content-Type':'application/json','x-token':T},body:b?JSON.stringify(b):undefined});
+ if(r.status==401&&u!='/api/login'){T='';localStorage.lt='';$('login').style.display='flex';throw 0}
+ const j=await r.json();if(j.error){toast(j.error,1);throw 0}return j}
+async function go(){try{const j=await api('POST','/api/login',{code:$('code').value});T=j.token;localStorage.lt=T;$('login').style.display='none';load()}catch(e){$('le').textContent='Yanlış kod'}}
+function copy(t){(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).catch(()=>{const a=document.createElement('textarea');a.value=t;document.body.append(a);a.select();document.execCommand('copy');a.remove()});toast('Kopyalandı ✓')}
+const ago=t=>{const s=(Date.now()-t)/1000;return s<60?'şimdi':s<3600?Math.floor(s/60)+' dk önce':s<86400?Math.floor(s/3600)+' sa önce':Math.floor(s/86400)+' gün önce'};
+const rem=t=>{const s=Math.max(0,(t-Date.now())/1000);return s<3600?Math.ceil(s/60)+' dk':s<86400?Math.floor(s/3600)+' sa '+Math.floor(s%3600/60)+' dk':Math.floor(s/86400)+' gün '+Math.floor(s%86400/3600)+' sa'};
+const emp=t=>`<div class="emp">${t}</div>`;
+async function load(m){if(!T)return;try{S=await api('GET','/api/state')}catch(e){return}
+ const s=S.stats,c=['#8b5cf6','#fff','#34d399','#f87171','#ef4444','#22d3ee'];
+ $('stats').innerHTML=[['TOPLAM SCRİPT',s.scripts],['TOPLAM KEY',s.keys],['AKTİF KEY',s.active],['KULLANILMIŞ',s.used],['BANLI',s.bans],['OYUNDA',s.live]].map((x,i)=>`<div class="stat"><span>${x[0]}</span><b style="color:${c[i]}">${x[1]}</b></div>`).join('');
+ document.querySelectorAll('.sel').forEach(e=>{const v=e.value;e.innerHTML=S.scripts.map(x=>`<option value="${x.id}">${esc(x.name)}</option>`).join('');if(v)e.value=v});
+ $('runs').innerHTML=S.runs.map(r=>`<div class="it"><div><b>${esc(r.name)}</b><br><small>ID: ${esc(r.uid)}</small></div><div style="text-align:right;color:#22d3ee">${esc(r.script)}<br><small style="color:#34d399">${ago(r.t)}</small></div></div>`).join('')||emp('Henüz çalıştırma yok');
+ $('live').innerHTML=S.live.map(p=>`<div class="it"><div><b>${esc(p.name)}</b> <small>ID: ${esc(p.uid)}</small><br><small>🎮 ${esc(p.gn)} • 📦 ${esc(p.script)} • ⏱ ${ago(p.since)} açtı</small></div><a class="btn sm" style="text-decoration:none" href="roblox://experiences/start?placeId=${encodeURIComponent(p.pid)}&gameInstanceId=${encodeURIComponent(p.jid)}">KATIL</a></div>`).join('')||emp('Şu an oyunda kimse yok');
+ $('keys').innerHTML=S.keys.map(k=>`<div class="it"><div><b style="font-family:Consolas">${esc(k.key)}</b> <span class="tag ${k.used?'no':'ok'}">${k.used?'KULLANILMIŞ':'KULLANILMAMIŞ'}</span><br><small>📦 ${esc(k.script)} • ⏳ ${rem(k.expires)} kaldı${k.note?' • '+esc(k.note):''}${k.usedBy?' • 👤 '+esc(k.usedBy):''}</small></div><div class="acts"><button class="btn sm" onclick="copy('${esc(k.key)}')">KOPYALA</button><button class="btn sm red" onclick="del('keys','${encodeURIComponent(k.key)}')">SİL</button></div></div>`).join('')||emp('Key yok');
+ $('scl').innerHTML=S.scripts.map(x=>`<div class="it"><div style="flex:1;min-width:260px"><b>${esc(x.name)}</b> ${x.keyless?'<span class="tag ok">KEYSİZ</span>':''}<pre>${esc(x.loadstring)}</pre></div><div class="acts"><button class="btn sm" onclick="cp('${x.id}')">KOPYALA</button><button class="btn sm" onclick="edit('${x.id}')">GÜNCELLE</button><button class="btn sm red" onclick="del('scripts','${x.id}')">SİL</button></div></div>`).join('')||emp('Script yok');
+ $('bl').innerHTML=S.bans.map(b=>`<div class="it"><div><b>${esc(b.name)}</b><br><small>${esc(b.reason)}</small></div><button class="btn sm red" onclick="del('bans','${b.id}')">BANI KALDIR</button></div>`).join('')||emp('✅ Banlı kullanıcı yok');
+ nav();if(m)toast('Yenilendi')}
+const cp=id=>copy(S.scripts.find(x=>x.id==id).loadstring);
+async function del(t,id){if(!confirm('Silinsin mi?'))return;await api('DELETE',`/api/${t}/${id}`);load()}
+async function upSc(){await api('POST','/api/scripts',{name:$('sn').value,code:$('sc').value,keyless:$('sk').checked});$('sn').value=$('sc').value='';toast('Script yüklendi ✓');load()}
+function edit(id){uid=id;$('un').value=S.scripts.find(x=>x.id==id).name;$('uc').value='';$('md').style.display='flex'}
+async function upd(){await api('PUT','/api/scripts/'+uid,{name:$('un').value,code:$('uc').value});$('md').style.display='none';toast('Güncellendi ✓');load()}
+async function mkKey(){const j=await api('POST','/api/keys',{sid:$('ks').value,amount:$('ka').value,unit:$('ku').value,note:$('kn').value,custom:$('kc').value.trim()});$('kc').value='';copy(j.keys.join('\n'));load()}
+async function quick(){const[a,u]=$('qd').value.split('|');const j=await api('POST','/api/keys',{sid:$('qs').value,amount:a,unit:u,qty:$('qq').value});copy(j.keys.join('\n'));load()}
+async function ban(){await api('POST','/api/bans',{name:$('bn').value,reason:$('br').value});$('bn').value=$('br').value='';toast('Yasaklandı ✓');load()}
+if(T){$('login').style.display='none';load()}else nav();
+setInterval(()=>{if(T&&$('md').style.display!='flex')load()},10000);
+</script></body></html>
